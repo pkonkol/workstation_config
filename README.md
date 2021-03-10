@@ -1,2 +1,2 @@
 # workstation_config
-Personal system configuration 
+Personal system configuration deployment.
