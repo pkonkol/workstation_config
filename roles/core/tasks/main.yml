@@ -1,15 +1,26 @@
 ---
 
+- name: Create usergroups
+  group:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - docker
+    - wheel
+  become: true
+
 - name: Create users
   user:
-    name: user
-    password: $1$huj123$5LvUSOpwbgynP0qYFyj6P1
+    name: "{{ username }}"
+    password: "{{ password }}"
     groups: docker,wheel
+  become: true
 
 - name: Update && upgrade packages
   community.general.pacman:
     update_cache: yes
     upgrade: yes
+  become: true
 
 - name: Install official packages
   package:
@@ -21,23 +32,46 @@
     - openvpn
     - git
     - tree
+  become: true
 
 - name: Check if yay installed
   command: 'which yay'
   register: yay_installed
   ignore_errors: yes
 
-- name: Install yay
-  when: yay_installed.rc != 0
-  shell: |
-    git clone https://aur.archlinux.org/yay.git /tmp/yay-install
-    cd /tmp/yay-install
-    makepkg -si --noconfirm
-    rm -rf /tmp/yay-install
+- name: test
+  debug:
+    msg: "{{ yay_installed.rc }}"
 
+- name: Install yay 2
+  shell:
+    cmd: ls
+  when: yay_installed.rc != 0
+
+- name: Install yay
+  shell:
+    cmd: |
+      pwd
+      git clone https://aur.archlinux.org/yay.git /tmp/yay-install
+      cd /tmp/yay-install
+      makepkg -si --noconfirm
+      rm -rf /tmp/yay-install
+    executable: /bin/bash
+    creates: /usr/bin/yay
+  register: log_yay
+  when: yay_installed.rc != 0
+
+- assert:
+  that:
+    - "'error' not in log_yay"
+
+# - name: test
+#   debug:
+#     msg: "{{ log_yay }}"
 
 - name: Touch test file
   file:
     dest: ~/test-vagrant-provision.txt
     owner: vagrant
     group: vagrant
+    state: touch
