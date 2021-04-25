@@ -1,0 +1,9 @@
+---
+
+- name: Install
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - vlc
+    - audacity

@@ -1,0 +1,5 @@
+---
+
+- name: Install TLP
+
+- name: Configure fingerprint reader

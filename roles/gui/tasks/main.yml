@@ -1,0 +1,12 @@
+---
+
+- name: Install xorg
+
+- name: Install i3
+
+- name: Configure i3
+  template:
+
+- name: Install Ly Display Manager
+
+- name: Install gui tools

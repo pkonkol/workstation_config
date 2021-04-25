@@ -1,0 +1,6 @@
+---
+
+- name: Install zsh
+
+- name: Copy config
+

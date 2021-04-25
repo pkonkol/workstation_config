@@ -1,0 +1,43 @@
+---
+
+- name: Create users
+  user:
+    name: user
+    password: $1$huj123$5LvUSOpwbgynP0qYFyj6P1
+    groups: docker,wheel
+
+- name: Update && upgrade packages
+  community.general.pacman:
+    update_cache: yes
+    upgrade: yes
+
+- name: Install official packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - base-devel
+    - htop
+    - openvpn
+    - git
+    - tree
+
+- name: Check if yay installed
+  command: 'which yay'
+  register: yay_installed
+  ignore_errors: yes
+
+- name: Install yay
+  when: yay_installed.rc != 0
+  shell: |
+    git clone https://aur.archlinux.org/yay.git /tmp/yay-install
+    cd /tmp/yay-install
+    makepkg -si --noconfirm
+    rm -rf /tmp/yay-install
+
+
+- name: Touch test file
+  file:
+    dest: ~/test-vagrant-provision.txt
+    owner: vagrant
+    group: vagrant
