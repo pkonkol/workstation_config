@@ -1,6 +1,23 @@
 ---
 
 - name: Install zsh
+  package:
+    name: zsh
+    state: present
+  become: true
 
 - name: Copy config
+  template:
+    src: templates/zshrc.j2
+    dest: /home/{{username}}/.zshrc
+    owner: "{{username}}"
+    group: "{{username}}"
+    mode: 0640
+  become: true
+
+- name: Set user default shell to zsh
+  user:
+    name: "{{ username }}"
+    shell: /usr/bin/zsh
+  become: true
 
