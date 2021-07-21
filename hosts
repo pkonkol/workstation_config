@@ -1,2 +1,14 @@
 [localhost]
 127.0.0.1 ansible_connection=local
+
+[localhost-arch]
+127.0.0.1 ansible_connection=local
+
+[localhost-ubuntu]
+127.0.0.1 ansible_connection=local
+
+[vagrant-arch]
+172.28.128.100 ansible_user=vagrant ansible_ssh_pass=vagrant
+
+[vagrant-ubuntu]
+172.28.128.0 ansible_user=vagrant ansible_ssh_pass=vagrant
