@@ -12,13 +12,25 @@
 - name: Create users
   user:
     name: "{{ username }}"
-    password: "{{ password }}"
+    password: "{{ userpasshash }}"
     groups: docker,wheel
   become: true
 
-- name: Update && upgrade packages
+- name: Ensuring that wheel is able to use sudo without password
+  lineinfile:
+    path: /etc/sudoers
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+  become: true
+
+- name: Update packages
   community.general.pacman:
     update_cache: yes
+  become: true
+
+- name: upgrade packages
+  community.general.pacman:
     upgrade: yes
   become: true
 
@@ -27,6 +39,8 @@
     name: "{{ item }}"
     state: present
   with_items:
+    - python3
+    - python-pip
     - base-devel
     - htop
     - openvpn
@@ -38,15 +52,6 @@
   command: 'which yay'
   register: yay_installed
   ignore_errors: yes
-
-- name: test
-  debug:
-    msg: "{{ yay_installed.rc }}"
-
-- name: Install yay 2
-  shell:
-    cmd: ls
-  when: yay_installed.rc != 0
 
 - name: Install yay
   shell:
@@ -62,16 +67,15 @@
   when: yay_installed.rc != 0
 
 - assert:
-  that:
-    - "'error' not in log_yay"
+    that:
+     - "'error' not in log_yay"
 
-# - name: test
-#   debug:
-#     msg: "{{ log_yay }}"
+- name: Install pip packages
+  pip:
+    name:
+     - github3.py
+     - requests
+    state: latest
+  become: true
+  become_user: "{{ username }}"
 
-- name: Touch test file
-  file:
-    dest: ~/test-vagrant-provision.txt
-    owner: vagrant
-    group: vagrant
-    state: touch

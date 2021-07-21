@@ -21,3 +21,36 @@
     shell: /usr/bin/zsh
   become: true
 
+- name: Check if zplug is installed
+  stat:
+    path: /home/{{username}}/.zplug
+  register: zplug_dir
+  become: true
+  become_user: "{{ username }}"
+
+- name: Find zplug latest release
+  github_release:
+    user: zplug
+    repo: zplug
+    action: latest_release
+  become: true
+  become_user: "{{ username }}"
+
+- name: Install zplug
+  when: not (zplug_dir.stat.exists and zplug_dir.stat.isdir)
+  git:
+    repo: "https://github.com/zplug/zplug.git"
+    dest: /home/{{username}}/.zplug
+
+  become: true
+  become_user: "{{ username }}"
+
+- name: zplug-install zsh plugins
+  shell:
+    cmd: |
+      source /home/{{username}}/.zshrc
+      zplug install
+    executable: /usr/bin/zsh
+  become: true
+  become_user: "{{ username }}"
+  when: run_zplug is defined

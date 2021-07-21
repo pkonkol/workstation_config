@@ -14,3 +14,18 @@
     group: "{{username}}"
     mode: 0640
   become: true
+
+- name: Check if tpm is installed
+  stat:
+    path: /home/{{username}}/.tmux/plugins/tpm
+  register: tpm_dir
+  become: true
+  become_user: "{{ username }}"
+
+- name: Install tpm
+  when: not (tpm_dir.stat.exists and tpm_dir.stat.isdir)
+  git:
+    repo: "https://github.com/tmux-plugins/tpm.git"
+    dest: /home/{{username}}/.tmux/plugins/tpm
+  become: true
+  become_user: "{{ username }}"
