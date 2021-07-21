@@ -1,5 +1,14 @@
 ---
 
+- name: Install basic utils
+    ansible.builtin.package:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - kitty
+      - chromium
+
+
 - name: Install xorg
 
 - name: Install i3
