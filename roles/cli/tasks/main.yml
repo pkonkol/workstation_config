@@ -3,3 +3,12 @@
 - include: zsh.yml
 - include: vim.yml
 - include: tmux.yml
+
+- name: Copy git config
+  template:
+    src: templates/gitconfig.j2
+    dest: /home/{{username}}/.gitconfig
+    owner: "{{username}}"
+    group: "{{username}}"
+    mode: 0640
+  become: true
