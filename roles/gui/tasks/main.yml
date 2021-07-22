@@ -1,21 +1,79 @@
 ---
-
-- name: Install basic utils
-    ansible.builtin.package:
-      name: "{{ item }}"
-      state: present
-    with_items:
-      - kitty
-      - chromium
-
-
 - name: Install xorg
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - xorg-server
+    - xorg-xinit
+    - xorg-xrandr
+  become: true
 
-- name: Install i3
+- name: Install i3 metapackages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+      - i3-wm
+      - i3lock
+      - dmenu
+      - dunst
+  become: true
+
+- name: Install additional packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+      - compton
+      - xsel
+      - rofi
+      - scrot
+      - viewnior
+      - xsettingsd
+      - hsetroot
+      - lxappearance
+  become: true
 
 - name: Configure i3
-  template:
+  ansible.builtin.copy:
+    src: "{{ item.s }}"
+    dest: "{{ item.d }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: '0644'
+  with_items:
+      - { s: "files/.config/i3/config", d: "/home/{{username}}/.config/i3/" }
+      - { s: "files/.config/dunst/dunstrc" , d: "/home/{{username}}/.config/dunst/" }
+      - { s: "files/.config/i3status/config" , d: "/home/{{username}}/.config/i3status/" }
+      - { s: "files/.config/compton.conf" , d: "/home/{{username}}/.config/" }
+      - { s: "files/.Xresources" , d: "/home/{{username}}/" }
+      - { s: "files/.xsettingsd" , d: "/home/{{username}}/" }
+  become: true
+
+
 
 - name: Install Ly Display Manager
+  aur:
+    name: ly
+  become: true
+  become_user: "{{ username }}"
 
-- name: Install gui tools
+- ansible.builtin.systemd:
+    name: ly.service
+    state: started
+    enabled: yes
+  become: true
+
+#- name: Install gui tools
+
+- name: Install basic gui utils
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - arandr
+    - kitty
+    - chromium
+  become: true
+
