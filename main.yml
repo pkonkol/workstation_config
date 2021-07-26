@@ -1,0 +1,25 @@
+---
+
+- hosts: "vagrant"
+  roles:
+    - core
+    - cli
+    - development
+
+- hosts: "vagrant-arch"
+  roles:
+    - core
+    - cli
+    - development
+
+- hosts: "localhost-arch"
+  roles:
+    - core
+    - cli
+    - development
+
+- hosts: "localhost-ubuntu"
+  roles:
+    - core
+    - cli
+    - development
