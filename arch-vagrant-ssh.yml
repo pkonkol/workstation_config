@@ -1,0 +1,7 @@
+---
+
+- hosts: "vagrant-arch"
+  roles:
+    - core
+    - cli
+    - development
