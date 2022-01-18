@@ -1,7 +1,7 @@
 # workstation_config
 Personal system configuration deployment.
 
-# Usage
+# Usage for arch
 
 1. Use with `vagrant provision`
     
@@ -14,5 +14,14 @@ Personal system configuration deployment.
 
 1. Use on localhost
 
-  * TBD
+  * If using `vagrant ssh` then `cd /home/vagrant/workstation-config`
+  * `ansible-playbook -i hosts -l localhost-arch main.yml`
+
+# Usage for Ubuntu
+
+1. `cd Ubuntu && vagrant up`
+1. `vagrant ssh`
+1. `cd /home/vagrant/workstation-config`
+2. `ansible-playbook -i hosts -l localhost-ubuntu main.yml`
+
 
