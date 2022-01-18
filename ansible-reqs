@@ -2,6 +2,9 @@ system:
     sshpass
 
 galaxy:
-    community.general.pacman
+    community.general
     kewlfft.aur
+
+plugin:
+    vagrant-guest_ansible
 
