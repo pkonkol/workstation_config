@@ -11,4 +11,7 @@
     - docker
     - virtualbox
     - nmap
+    - vagrant
+    - veracrypt
+    - nodejs
   become: true

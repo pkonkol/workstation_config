@@ -26,4 +26,10 @@ Personal system configuration deployment.
 1. `ansible-playbook -i 127.0.0.1, -c local -v ubuntu-cli.yml` 
    *** Not working atm because of hardcoded pacman use in >core ***
 
-
+# TODO
+ So i don't forget
+ - i3 ricing
+ - support for ubuntu in CLI/core/dev roles
+ - speed up zsh loading (zplug is too slow)
+ - move package lists from role file to group vars
+ - use ansible-vaults for secrets

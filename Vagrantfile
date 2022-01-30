@@ -1,4 +1,5 @@
 Vagrant.configure("2") do |config|
+  USE_GUI = true
   config.vm.box = "terrywang/archlinux"
 
   #config.vm.network "private_network", ip: "172.28.128.100"
@@ -18,7 +19,10 @@ Vagrant.configure("2") do |config|
     ansible.playbook = "vagrant.yml"
   end
   config.vm.provider "virtualbox" do |vbox|
-    nil
-    #vbox.gui = true
+    if USE_GUI
+      vbox.memory = 2048
+      vbox.cpus = 2
+      vbox.gui = true
+    end
   end
 end

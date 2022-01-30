@@ -16,6 +16,7 @@
   with_items:
       - i3-wm
       - i3lock
+      - i3status
       - dmenu
       - dunst
   become: true
@@ -25,7 +26,9 @@
     name: "{{ item }}"
     state: present
   with_items:
-      - compton
+      - volumeicon
+      - xorg-xsetroot
+      - picom
       - xsel
       - rofi
       - scrot
@@ -36,7 +39,7 @@
   become: true
 
 - name: Additional packages from aur
-  aur:
+  kewlfft.aur.aur:
     name: "{{ item }}"
   become: true
   become_user: "{{ username }}"
@@ -53,18 +56,18 @@
   with_items:
       - { s: "files/.config/i3/config", d: "/home/{{username}}/.config/i3/" }
       - { s: "files/.config/dunst/dunstrc" , d: "/home/{{username}}/.config/dunst/" }
-      - { s: "files/.config/i3status/config" , d: "/home/{{username}}/.config/i3status/" }
+      - { s: "files/.config/i3status/config.txt" , d: "/home/{{username}}/.config/i3status/" }
       - { s: "files/.config/compton.conf" , d: "/home/{{username}}/.config/" }
       - { s: "files/.Xresources" , d: "/home/{{username}}/" }
       - { s: "files/.xsettingsd" , d: "/home/{{username}}/" }
-      - { s: "files/.config/oomox/colors/srcery, d: "/home/{{username}}/.config/oomox/colors/" }
+      - { s: "files/.config/oomox/colors/srcery", d: "/home/{{username}}/.config/oomox/colors/" }
       - { s: "files/.config/procps/toprc", d: "/home/{{username}}/.config/procps/" }
       - { s: "files/.config/kitty/kitty.conf", d: "/home/{{username}}/.config/kitty/" }
       - { s: "files/.config/kitty/srcery_kitty.conf", d: "/home/{{username}}/.config/kitty/" }
   become: true
 
 - name: Install Ly Display Manager
-  aur:
+  kewlfft.aur.aur:
     name: ly
   become: true
   become_user: "{{ username }}"
@@ -85,5 +88,17 @@
     - arandr
     - kitty
     - chromium
+    - code
+    - keepass
+    - firefox
+    - gedit
+    - calibre
   become: true
 
+- name: Gui utils from aur
+  kewlfft.aur.aur:
+    name: "{{ item }}"
+  become: true
+  become_user: "{{ username }}"
+  with_items:
+    - obsidian

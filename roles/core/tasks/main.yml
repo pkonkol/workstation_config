@@ -86,3 +86,11 @@
   become: true
   become_user: "{{ username }}"
 
+- name: Install network manager & applet
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - networkmanager
+    - network-manager-applet
+  become: true
