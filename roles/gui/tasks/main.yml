@@ -16,9 +16,6 @@
   with_items:
       - i3-wm
       - i3lock
-      - i3status
-      - dmenu
-      - dunst
   become: true
 
 - name: Install additional packages
@@ -26,16 +23,19 @@
     name: "{{ item }}"
     state: present
   with_items:
+      - dunst
       - volumeicon
       - xorg-xsetroot
       - picom
       - xsel
       - rofi
+      - rofi-calc
       - scrot
       - viewnior
       - xsettingsd
       - hsetroot
       - lxappearance
+      - feh
   become: true
 
 - name: Additional packages from aur
@@ -45,6 +45,9 @@
   become_user: "{{ username }}"
   with_items:
     - themix-full-git
+    - polybar
+    - nerd-fonts-source-code-pro
+    - nerd-fonts-jetbrains-mono
 
 - name: Copy dotfiles
   ansible.builtin.copy:
@@ -56,7 +59,6 @@
   with_items:
       - { s: "files/.config/i3/config", d: "/home/{{username}}/.config/i3/" }
       - { s: "files/.config/dunst/dunstrc" , d: "/home/{{username}}/.config/dunst/" }
-      - { s: "files/.config/i3status/config.txt" , d: "/home/{{username}}/.config/i3status/" }
       - { s: "files/.config/compton.conf" , d: "/home/{{username}}/.config/" }
       - { s: "files/.Xresources" , d: "/home/{{username}}/" }
       - { s: "files/.xsettingsd" , d: "/home/{{username}}/" }
@@ -64,6 +66,16 @@
       - { s: "files/.config/procps/toprc", d: "/home/{{username}}/.config/procps/" }
       - { s: "files/.config/kitty/kitty.conf", d: "/home/{{username}}/.config/kitty/" }
       - { s: "files/.config/kitty/srcery_kitty.conf", d: "/home/{{username}}/.config/kitty/" }
+      - { s: "files/.config/rofi/srcery_rofi.rasi", d: "/home/{{username}}/.config/rofi/" }
+      - { s: "files/.config/rofi/config.rasi", d: "/home/{{username}}/.config/rofi/" }
+      - { s: "files/.config/polybar", d: "/home/{{username}}/.config/" }
+      - { s: "files/.wallpapers", d: "/home/{{username}}/" }
+  become: true
+
+- name: Chmod +x for scripts
+  file: dest="{{item}}" mode="ug+x"
+  with_items:
+    - "/home/{{username}}/.config/polybar/launch.sh"
   become: true
 
 - name: Install Ly Display Manager
