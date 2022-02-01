@@ -1,2 +1,0 @@
-[vagrant-arch]
-172.28.128.100 ansible_user=vagrant ansible_ssh_pass=vagrant

@@ -4,23 +4,25 @@ Personal system configuration deployment.
 # Prerequisites
 `vagrant plugin install vagrant-disksize`
 
+Some other deps:
+```
+galaxy:
+    community.general
+    kewlfft.aur
+plugin:
+    vagrant-guest_ansible (for provisioning on windows)
+```
+
 # Usage for arch
 
 1. On clean system:
 ```sh
 sudo pacman -S ansible
 ansible-galaxy collection install -r requirements.yml
-
 ```
 
 2. Use with `vagrant provision`
     Self explanatory, works only on linux
-
-3. Use manually with vagrant VM
-  * Ssh into the goal machine to add it to known_hosts
-  * Run `ansible-playbook -v arch-vagrant-ssh.yml -l vagrant-arch`
-  * TBD remove arch-vagrant-ssh.yml and hosts, crete command for running it
-    from arch-cli or arch-gui
 
 1. Use on localhost
   * If using `vagrant ssh` then `cd /home/vagrant/workstation-config`
