@@ -46,7 +46,7 @@
   xgray4:        #444444;
   xgray5:        #4E4E4E;
 
-  highlight:     bold #E02C6D;
+  highlight:     bold #EF2F27;
 
   selected-normal-foreground:  @black;
   selected-normal-background:  @brightwhite;

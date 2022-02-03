@@ -11,7 +11,7 @@ configuration {
 	combi-modi: "window,drun";
 
   /* Location on screen */
-	location: 1;
+	location: 0;
 
 	terminal: "kitty";
 
@@ -62,7 +62,7 @@ configuration {
   lines: 62;
 
   /* My font of choice, rofi does not respect DPI settings. */
-  font: "JetBrainsMono Nerd Font Mono";
+  font: "TamzenForPowerline";
 
 }
 

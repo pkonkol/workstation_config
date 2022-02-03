@@ -36,6 +36,7 @@
       - hsetroot
       - lxappearance
       - feh
+      - terminus-font
   become: true
 
 - name: Additional packages from aur
@@ -46,8 +47,8 @@
   with_items:
     - themix-full-git
     - polybar
-    - nerd-fonts-source-code-pro
-    - nerd-fonts-jetbrains-mono
+    - tamzen-font
+    - nerd-fonts-anonymous-pro
 
 - name: Copy dotfiles
   ansible.builtin.copy:
@@ -99,6 +100,7 @@
   with_items:
     - arandr
     - kitty
+    - alacritty
     - chromium
     - code
     - keepass
