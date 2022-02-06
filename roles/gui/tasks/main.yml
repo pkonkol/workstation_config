@@ -14,7 +14,7 @@
     name: "{{ item }}"
     state: present
   with_items:
-      - i3-wm
+      - i3-gaps
       - i3lock
   become: true
 
@@ -37,6 +37,7 @@
       - lxappearance
       - feh
       - terminus-font
+      - thunar
   become: true
 
 - name: Additional packages from aur
@@ -60,17 +61,32 @@
   with_items:
       - { s: "files/.config/i3/config", d: "/home/{{username}}/.config/i3/" }
       - { s: "files/.config/dunst/dunstrc" , d: "/home/{{username}}/.config/dunst/" }
-      - { s: "files/.config/compton.conf" , d: "/home/{{username}}/.config/" }
+      - { s: "files/.config/picom.conf" , d: "/home/{{username}}/.config/" }
       - { s: "files/.Xresources" , d: "/home/{{username}}/" }
       - { s: "files/.xsettingsd" , d: "/home/{{username}}/" }
       - { s: "files/.config/oomox/colors/srcery", d: "/home/{{username}}/.config/oomox/colors/" }
       - { s: "files/.config/procps/toprc", d: "/home/{{username}}/.config/procps/" }
       - { s: "files/.config/kitty/kitty.conf", d: "/home/{{username}}/.config/kitty/" }
       - { s: "files/.config/kitty/srcery_kitty.conf", d: "/home/{{username}}/.config/kitty/" }
+      - { s: "files/.config/alacritty", d: "/home/{{username}}/.config/" }
       - { s: "files/.config/rofi/srcery_rofi.rasi", d: "/home/{{username}}/.config/rofi/" }
       - { s: "files/.config/rofi/config.rasi", d: "/home/{{username}}/.config/rofi/" }
       - { s: "files/.config/polybar", d: "/home/{{username}}/.config/" }
       - { s: "files/.wallpapers", d: "/home/{{username}}/" }
+      - { s: "files/.themes", d: "/home/{{username}}" }
+      - { s: "files/.config/gtk-3.0", d: "/home/{{username}}/.config" }
+      - { s: "files/.gtkrc-2.0", d: "/home/{{username}}/" }
+  become: true
+
+- name: Copy root dotfiles
+  ansible.builtin.copy:
+    src: "{{ item.s }}"
+    dest: "{{ item.d }}"
+    owner: "root"
+    group: "root"
+    mode: '0644'
+  with_items:
+    - { s: "files/xinitrc", d: "/etc/X11/xinit/" }
   become: true
 
 - name: Chmod +x for scripts
@@ -79,17 +95,17 @@
     - "/home/{{username}}/.config/polybar/launch.sh"
   become: true
 
-- name: Install Ly Display Manager
-  kewlfft.aur.aur:
-    name: ly
-  become: true
-  become_user: "{{ username }}"
+# - name: Install Ly Display Manager
+#   kewlfft.aur.aur:
+#     name: ly
+#   become: true
+#   become_user: "{{ username }}"
 
-- ansible.builtin.systemd:
-    name: ly.service
-    state: started
-    enabled: yes
-  become: true
+# - ansible.builtin.systemd:
+#     name: ly.service
+#     state: started
+#     enabled: yes
+#   become: true
 
 #- name: Install gui tools
 

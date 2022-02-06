@@ -20,7 +20,7 @@ font pango: Anonymice Nerd Font Mono 12
 #font pango:DejaVu Sans Mono 8
 
 # manually added autostart
-exec_always --no-startup-id "picom --config ~/.config/compton.conf"
+exec_always --no-startup-id "picom --config ~/.config/picom.conf"
 exec_always --no-startup-id "~/.config/polybar/launch.sh"
 # exec --no-startup-id hsetroot -solid "$black"
 exec_always --no-startup-id feh --randomize --bg-fill ~/.wallpapers/*
@@ -145,7 +145,7 @@ set $right semicolon
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec alacritty
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -288,3 +288,11 @@ mode "resize" {
 }
 
 bindsym $mod+r mode "resize"
+
+gaps inner 10
+gaps outer 0
+smart_gaps on
+smart_borders on
+
+default_border pixel 1
+default_floating_border pixel 1
