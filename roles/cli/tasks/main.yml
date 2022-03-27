@@ -1,0 +1,14 @@
+---
+
+- import_tasks: zsh.yml
+- import_tasks: vim.yml
+- import_tasks: tmux.yml
+
+- name: Copy git config
+  template:
+    src: templates/gitconfig.j2
+    dest: /home/{{username}}/.gitconfig
+    owner: "{{username}}"
+    group: "{{username}}"
+    mode: 0640
+  become: true

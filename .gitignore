@@ -1,0 +1,4 @@
+.vagrant/
+Ubuntu/.vagrant/
+vagrant_ansible_inventory_default
+.vscode/

@@ -1,0 +1,17 @@
+---
+
+- hosts: "all"
+  gather_facts: true  
+  roles:
+    - { role: core, tags: ["core",]}  # TODO better name for core role
+    - { role: cli, tags: ["core", "cli"]}
+    - { role: development, tags: ["core", "dev"]}
+
+    - role: gui-base-i3
+      when: ansible_facts["os_family"] == "Archlinux"
+      tags: [gui_i3, gui]
+    - role: gui-tools
+      tags: [gui_tools, gui]
+    - role: laptop
+      tags: laptop
+

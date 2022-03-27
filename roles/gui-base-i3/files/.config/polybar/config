@@ -1,0 +1,228 @@
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================
+
+[global/wm]
+margin-top = 0
+margin-bottom = 0
+include-file = $HOME/.config/polybar/srcery
+
+[bar/all]
+inherit = bar/srcery
+monitor = ${env:MONITOR}
+width = 100%
+height = 18
+offset-y = 0
+offset-x = 0
+radius = 0
+fixed-center = true
+line-size = 1
+border-size = 5
+; border-color = ${color.red}
+border-bottom-size = 0
+padding-left = 2
+padding-right = 2
+module-margin-left = 1
+module-margin-right = 1
+modules-left = i3
+modules-center = xwindow
+; wm-restack = i3
+modules-right = pulseaudio root wifi cpu mem battery date powermenu
+cursor-click = pointer
+cursor-scroll = ns-resize
+bottom=false
+font-0 = "TamzenForPowerline:pixelsize=20;2"
+font-1 = "Tamzen:pixelsize=20;2"
+tray-position = right
+dpi-x = 0
+dpi-y = 0
+enable-ipc = true
+
+[module/i3]
+inherit=module/srcery
+type= internal/i3
+
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = false
+
+pin-workspaces = true
+inline-mode = true
+fuzzy-match = true
+
+label-mode-padding = 0
+label-mode-foreground = ${color.black}
+label-mode-background = ${color.white}
+
+label-focused = %name%
+label-focused-background = ${color.bright_black}
+label-focused-underline= ${color.red}
+label-focused-foreground= ${color.yellow}
+label-focused-padding = 1
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %name%
+label-unfocused-padding = 1
+
+; visible = Active workspace on unfocused monitor
+label-visible = %name%
+label-visible-background = ${self.label-focused-background}
+label-visible-underline = ${self.label-focused-underline}
+label-visible-padding = ${self.label-focused-padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = %name%
+label-urgent-background = ${color.yellow}
+label-urgent-underline = ${self.label-focused-underline}
+label-urgent-padding = 1
+
+label-separator = |
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:30:...%
+
+[module/wifi]
+type = internal/network
+interface = eth0
+label-connected = net: %downspeed%
+format-connected = <label-connected>
+
+[module/battery]
+type = internal/battery
+full-at = 99
+low-at = 10
+battery = BAT0
+adapter = AC
+poll-interval = 5
+format-charging = <label-charging>
+format-full = <label-full>
+format-discharging = <label-discharging>
+label-charging = bat:(+)%percentage%%
+label-full = bat:%percentage%%
+label-discharging = bat:(-)%percentage%%
+
+
+[module/mic]
+inherit=module/srcery
+type = custom/ipc
+hook-0 = $HOME/Git/dots/scripts/mic.sh
+initial = 1
+click-left = amixer sset Capture toggle && polybar-msg -p %pid% hook mic 1
+
+[module/pulseaudio]
+type = internal/pulseaudio
+use-ui-max = false
+interval = 5
+label-volume = vol:%percentage%%
+label-muted-foreground = ${srcery-colors.magenta}
+format-volume = <label-volume>
+click-right = pavucontrol &
+
+[module/home]
+inherit=module/srcery
+type=internal/fs
+intervall=25
+mount-0=/home
+label-mounted = home:%{T2}%percentage_used%%%{T-}
+format-mounted = <label-mounted>
+format-unmounted = <label-unmounted>
+
+[module/root]
+inherit=module/srcery
+type=internal/fs
+intervall=25
+mount-0=/
+label-mounted = root:%{T2}%percentage_used%%%{T-}
+format-mounted = <label-mounted>
+format-unmounted = <label-unmounted>
+
+[module/title]
+inherit=module/srcery
+type = internal/xwindow
+format = <label>
+format-padding = 0
+label = "%{T2}%title%%{T-}"
+label-maxlen = 40
+
+[module/cpu]
+inherit=module/srcery
+type = internal/cpu
+interval = 2
+; format-prefix = " "
+label = cpu:%percentage:2%%
+format = <label>
+
+[module/mem]
+inherit=module/srcery
+type = internal/memory
+interval = 2
+; format-prefix = " "
+label = mem:%percentage_used%%
+format = <label>
+
+[module/date]
+inherit=module/srcery
+type = internal/date
+interval = 5
+date = "%Y-%m-%d"
+date-alt = "%d/%m/%Y"
+time = %H:%M
+time-alt = [%H:%M:%S]
+label = %date% %time%
+
+[module/powermenu]
+type = custom/menu
+
+expand-right = true
+
+format-spacing = 1
+
+label-open = power
+label-open-foreground = ${colors.secondary}
+label-close =  cancel
+label-close-foreground = ${colors.secondary}
+label-separator = |
+label-separator-foreground = ${colors.foreground-alt}
+
+menu-0-0 = reboot
+menu-0-0-exec = menu-open-1
+menu-0-1 = power off
+menu-0-1-exec = menu-open-2
+
+menu-1-0 = cancel
+menu-1-0-exec = menu-open-0
+menu-1-1 = reboot
+menu-1-1-exec = sudo reboot
+
+menu-2-0 = power off
+menu-2-0-exec = sudo poweroff
+menu-2-1 = cancel
+menu-2-1-exec = menu-open-0
+
+[module/demo]
+type = custom/ipc
+hook-0 = echo foobar
+hook-1 = date +%s
+hook-2 = whoami
+initial = 1
+click-left = "#demo.hook.0"
+click-right = "#demo.hook.1"
+double-click-left = "#demo.hook.2"
+
+[settings]
+screenchange-reload = true

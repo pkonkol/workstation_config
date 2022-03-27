@@ -1,0 +1,105 @@
+---
+
+- name: Create usergroups
+  group:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - docker
+    - wheel
+  become: true
+
+- name: Create user
+  user:
+    name: "{{ username }}"
+    password: "{{ userpasshash }}"
+    groups: docker,wheel
+  become: true
+
+- name: Ensuring that wheel is able to use sudo without password
+  lineinfile:
+    path: /etc/sudoers
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+  become: true
+
+- lineinfile:
+    path: /etc/sudoers.d/11-install-aur_builder
+    line: '{{ username }} ALL=(ALL) NOPASSWD: /usr/bin/pacman'
+    create: yes
+    validate: 'visudo -cf %s'
+  become: true
+
+- name: Update packages
+  when: ansible_facts["os_family"] == "Archlinux"
+  community.general.pacman:
+    update_cache: yes
+  become: true
+
+- name: upgrade packages
+  when: ansible_facts["os_family"] == "Archlinux"
+  community.general.pacman:
+    upgrade: yes
+  become: true
+
+- name: update & upgrade ubuntu
+  when: ansible_facts["os_family"] == "Ubuntu"
+  apt:
+    update_cache: yes
+    upgrade: yes
+  become: true
+
+- name: Install official packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python3
+    - python-pip
+    - base-devel
+    - htop
+    - openvpn
+    - git
+    - tree
+  become: true
+
+- name: Check if yay installed
+  command: 'which yay'
+  register: yay_installed
+  ignore_errors: yes
+
+- name: Install yay
+  shell:
+    cmd: |
+      pwd
+      git clone https://aur.archlinux.org/yay.git /tmp/yay-install
+      cd /tmp/yay-install
+      makepkg -si --noconfirm
+      rm -rf /tmp/yay-install
+    executable: /bin/bash
+    creates: /usr/bin/yay
+  register: log_yay
+  when: yay_installed.rc != 0
+
+- assert:
+    that:
+     - "'error' not in log_yay"
+
+- name: Install pip packages
+  pip:
+    name:
+     - github3.py
+     - requests
+    state: latest
+  become: true
+  become_user: "{{ username }}"
+
+- name: Install network manager & applet
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - networkmanager
+    - network-manager-applet
+  become: true

@@ -1,0 +1,17 @@
+---
+
+- name: Install packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python
+    - python-pip
+    - go
+    - docker
+    - virtualbox
+    - nmap
+    - vagrant
+    - veracrypt
+    - nodejs
+  become: true
