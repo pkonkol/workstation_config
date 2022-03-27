@@ -1,8 +1,8 @@
 ---
 
-- include: zsh.yml
-- include: vim.yml
-- include: tmux.yml
+- import_tasks: zsh.yml
+- import_tasks: vim.yml
+- import_tasks: tmux.yml
 
 - name: Copy git config
   template:

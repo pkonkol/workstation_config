@@ -1,7 +1,0 @@
----
-
-- hosts: "all"
-  roles:
-    - core
-    - cli
-    - development

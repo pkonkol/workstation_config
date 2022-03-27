@@ -9,7 +9,7 @@
     - wheel
   become: true
 
-- name: Create users
+- name: Create user
   user:
     name: "{{ username }}"
     password: "{{ userpasshash }}"
@@ -32,12 +32,21 @@
   become: true
 
 - name: Update packages
+  when: ansible_facts["os_family"] == "Archlinux"
   community.general.pacman:
     update_cache: yes
   become: true
 
 - name: upgrade packages
+  when: ansible_facts["os_family"] == "Archlinux"
   community.general.pacman:
+    upgrade: yes
+  become: true
+
+- name: update & upgrade ubuntu
+  when: ansible_facts["os_family"] == "Ubuntu"
+  apt:
+    update_cache: yes
     upgrade: yes
   become: true
 

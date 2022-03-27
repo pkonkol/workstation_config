@@ -7,8 +7,8 @@
   become: true
 
 - name: Copy config
-  template:
-    src: templates/vimrc.j2
+  copy:
+    src: files/.vimrc
     dest: /home/{{username}}/.vimrc
     owner: "{{username}}"
     group: "{{username}}"

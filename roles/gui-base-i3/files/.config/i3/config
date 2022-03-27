@@ -93,7 +93,7 @@ set $xgray5 #4E4E4E
 set $hard_black #121212
 
 # Colors                border        background  text          indicator child_border
-client.focused          $bright_black $xgray3     $yellow       $yellow   $bright_black
+client.focused          $bright_black $xgray3     $yellow       $yellow   $yellow
 client.focused_inactive $xgray3       $xgray3     $bright_black $xgray3   $xgray3
 client.unfocused        $xgray1       $xgray1     $bright_black $xgray1   $xgray1
 client.urgent           $red          $xgray1     $red          $red      $red
@@ -136,10 +136,10 @@ bindsym XF86MonBrightnessUp exec xbacklight -inc 10
 
 # use these keys for focus, movement, and resize directions when reaching for
 # the arrows is not convenient
-set $up l
-set $down k
-set $left j
-set $right semicolon
+set $up k
+set $down j
+set $left h
+set $right l
 
 # use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -183,7 +183,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+h split h
+bindsym $mod+% split h
 
 # split in vertical orientation
 bindsym $mod+v split v
@@ -289,10 +289,11 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-gaps inner 10
-gaps outer 0
-smart_gaps on
-smart_borders on
+gaps inner 4
+gaps outer 2
+gaps top 0
+# smart_gaps off
+# smart_borders off
 
 default_border pixel 1
 default_floating_border pixel 1

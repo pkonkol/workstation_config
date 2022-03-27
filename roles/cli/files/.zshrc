@@ -15,6 +15,8 @@ setopt auto_pushd
 setopt notify
 setopt nohup
 
+eval `dircolors ~/.config/dircolors.moonshine`
+
 alias ls='ls --color=auto'
 alias less='less -R'
 alias watch='watch --color'

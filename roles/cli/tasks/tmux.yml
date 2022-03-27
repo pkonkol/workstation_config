@@ -7,8 +7,8 @@
   become: true
 
 - name: Copy config
-  template:
-    src: templates/tmux.conf.j2
+  copy:
+    src: files/.tmux.conf
     dest: /home/{{username}}/.tmux.conf
     owner: "{{username}}"
     group: "{{username}}"

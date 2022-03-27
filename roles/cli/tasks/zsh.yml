@@ -7,12 +7,24 @@
   become: true
 
 - name: Copy config
-  template:
-    src: templates/zshrc.j2
+  copy:
+    src: files/.zshrc
     dest: /home/{{username}}/.zshrc
     owner: "{{username}}"
     group: "{{username}}"
     mode: 0640
+  become: true
+
+# Just .config dir for now, TODO remove with_items
+- name: copy additional configuration files 
+  copy: 
+    src: "{{ item.s }}"
+    dest: "{{ item.d }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: '0644'
+  with_items:
+    - { s: "files/.config/", d: "/home/{{username}}/.config/" }
   become: true
 
 - name: Set user default shell to zsh
@@ -36,21 +48,11 @@
   become: true
   become_user: "{{ username }}"
 
+# TODO change zplug to something reasonably fast
 - name: Install zplug
   when: not (zplug_dir.stat.exists and zplug_dir.stat.isdir)
   git:
     repo: "https://github.com/zplug/zplug.git"
     dest: /home/{{username}}/.zplug
-
   become: true
   become_user: "{{ username }}"
-
-- name: zplug-install zsh plugins
-  shell:
-    cmd: |
-      source /home/{{username}}/.zshrc
-      zplug install
-    executable: /usr/bin/zsh
-  become: true
-  become_user: "{{ username }}"
-  when: run_zplug is defined

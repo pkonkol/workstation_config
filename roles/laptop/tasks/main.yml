@@ -1,5 +1,7 @@
 ---
 
 - name: Install TLP
+  meta: noop
 
 - name: Configure fingerprint reader
+  meta: noop

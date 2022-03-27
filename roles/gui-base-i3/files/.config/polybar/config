@@ -25,20 +25,23 @@ include-file = $HOME/.config/polybar/srcery
 inherit = bar/srcery
 monitor = ${env:MONITOR}
 width = 100%
-height = 26
+height = 18
 offset-y = 0
 offset-x = 0
 radius = 0
 fixed-center = true
 line-size = 1
-border-size = 1
+border-size = 5
+; border-color = ${color.red}
+border-bottom-size = 0
 padding-left = 2
 padding-right = 2
 module-margin-left = 1
 module-margin-right = 1
 modules-left = i3
+modules-center = xwindow
 ; wm-restack = i3
-modules-right = pulseaudio root wifi cpu mem battery date
+modules-right = pulseaudio root wifi cpu mem battery date powermenu
 cursor-click = pointer
 cursor-scroll = ns-resize
 bottom=false
@@ -58,10 +61,10 @@ index-sort = true
 wrapping-scroll = false
 
 pin-workspaces = true
-inline-mode = false
+inline-mode = true
 fuzzy-match = true
 
-label-mode-padding = 2
+label-mode-padding = 0
 label-mode-foreground = ${color.black}
 label-mode-background = ${color.white}
 
@@ -69,11 +72,11 @@ label-focused = %name%
 label-focused-background = ${color.bright_black}
 label-focused-underline= ${color.red}
 label-focused-foreground= ${color.yellow}
-label-focused-padding = 2
+label-focused-padding = 1
 
 ; unfocused = Inactive workspace on any monitor
 label-unfocused = %name%
-label-unfocused-padding = 2
+label-unfocused-padding = 1
 
 ; visible = Active workspace on unfocused monitor
 label-visible = %name%
@@ -85,100 +88,34 @@ label-visible-padding = ${self.label-focused-padding}
 label-urgent = %name%
 label-urgent-background = ${color.yellow}
 label-urgent-underline = ${self.label-focused-underline}
-label-urgent-padding = 2
+label-urgent-padding = 1
 
-; Separator in between workspaces
 label-separator = |
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:30:...%
 
 [module/wifi]
 type = internal/network
-interface = wlp4s0
-ramp-signal-0 = 睊
-ramp-signal-1 = 直
-ramp-signal-2 = 
-label-connected = %{T2}%essid%%{T-}
-format-connected = <ramp-signal> <label-connected>
+interface = eth0
+label-connected = net: %downspeed%
+format-connected = <label-connected>
 
 [module/battery]
 type = internal/battery
 full-at = 99
+low-at = 10
 battery = BAT0
 adapter = AC
 poll-interval = 5
+format-charging = <label-charging>
+format-full = <label-full>
+format-discharging = <label-discharging>
+label-charging = bat:(+)%percentage%%
+label-full = bat:%percentage%%
+label-discharging = bat:(-)%percentage%%
 
-; see "man date" for details on how to format the time string
-; NOTE: if you want to use syntax tags here you need to use %%{...}
-; Default: %H:%M:%S
-time-format = %H:%M
-
-; Available tags:
-;   <label-charging> (default)
-;   <bar-capacity>
-;   <ramp-capacity>
-;   <animation-charging>
-format-charging = <animation-charging>  <label-charging>
-
-; Available tags:
-;   <label-discharging> (default)
-;   <bar-capacity>
-;   <ramp-capacity>
-;   <animation-discharging>
-format-discharging = <ramp-capacity>  <label-discharging>
-
-; Available tags:
-;   <label-full> (default)
-;   <bar-capacity>
-;   <ramp-capacity>
-;format-full = <ramp-capacity> <label-full>
-
-; Available tokens:
-;   %percentage% (default) - is set to 100 if full-at is reached
-;   %percentage_raw%
-;   %time%
-;   %consumption% (shows current charge rate in watts)
-label-charging = %{T2}%percentage%%%{T-}
-
-; Available tokens:
-;   %percentage% (default) - is set to 100 if full-at is reached
-;   %percentage_raw%
-;   %time%
-;   %consumption% (shows current discharge rate in watts)
-label-discharging = %{T2}%percentage%% %time% %consumption%W %{T-}
-
-; Available tokens:
-;   %percentage% (default) - is set to 100 if full-at is reached
-;   %percentage_raw%
-label-full = 
-label-full-foreground = ${srcery-colors.green}
-label-full-padding = 1
-
-; Only applies if <ramp-capacity> is used
-ramp-capacity-0 = 
-ramp-capacity-1 = 
-ramp-capacity-2 = 
-ramp-capacity-3 = 
-ramp-capacity-4 = 
-
-; Only applies if <bar-capacity> is used
-bar-capacity-width = 10
-
-; Only applies if <animation-charging> is used
-animation-charging-0 = 
-animation-charging-1 = 
-animation-charging-2 = 
-animation-charging-3 = 
-animation-charging-4 = 
-; Framerate in milliseconds
-animation-charging-framerate = 750
-
-; Only applies if <animation-discharging> is used
-animation-discharging-0 = 
-animation-discharging-1 = 
-animation-discharging-2 = 
-animation-discharging-3 = 
-animation-discharging-4 = 
-; Framerate in milliseconds
-animation-discharging-framerate = 500
 
 [module/mic]
 inherit=module/srcery
@@ -191,14 +128,9 @@ click-left = amixer sset Capture toggle && polybar-msg -p %pid% hook mic 1
 type = internal/pulseaudio
 use-ui-max = false
 interval = 5
-format-muted = <label-muted>
-label-volume = %{T2}%percentage%%%{T-}
-label-muted = 婢 muted
+label-volume = vol:%percentage%%
 label-muted-foreground = ${srcery-colors.magenta}
-ramp-volume-0 = 奄
-ramp-volume-1 = 墳
-ramp-volume-2 = 
-format-volume = <ramp-volume> <label-volume>
+format-volume = <label-volume>
 click-right = pavucontrol &
 
 [module/home]
@@ -206,14 +138,18 @@ inherit=module/srcery
 type=internal/fs
 intervall=25
 mount-0=/home
-label-mounted =  %{T2}%percentage_used%%%{T-}
+label-mounted = home:%{T2}%percentage_used%%%{T-}
+format-mounted = <label-mounted>
+format-unmounted = <label-unmounted>
 
 [module/root]
 inherit=module/srcery
 type=internal/fs
 intervall=25
 mount-0=/
-label-mounted =  %{T2}%percentage_used%%%{T-}
+label-mounted = root:%{T2}%percentage_used%%%{T-}
+format-mounted = <label-mounted>
+format-unmounted = <label-unmounted>
 
 [module/title]
 inherit=module/srcery
@@ -227,16 +163,16 @@ label-maxlen = 40
 inherit=module/srcery
 type = internal/cpu
 interval = 2
-format-prefix = " "
-label = %{T2}%percentage:2%%%{T-}
+; format-prefix = " "
+label = cpu:%percentage:2%%
 format = <label>
 
 [module/mem]
 inherit=module/srcery
 type = internal/memory
 interval = 2
-format-prefix = " "
-label = %{T2}%percentage_used%%%{T-}
+; format-prefix = " "
+label = mem:%percentage_used%%
 format = <label>
 
 [module/date]
@@ -247,7 +183,46 @@ date = "%Y-%m-%d"
 date-alt = "%d/%m/%Y"
 time = %H:%M
 time-alt = [%H:%M:%S]
-label = %{T2}%date% %time%%{T-}
+label = %date% %time%
+
+[module/powermenu]
+type = custom/menu
+
+expand-right = true
+
+format-spacing = 1
+
+label-open = power
+label-open-foreground = ${colors.secondary}
+label-close =  cancel
+label-close-foreground = ${colors.secondary}
+label-separator = |
+label-separator-foreground = ${colors.foreground-alt}
+
+menu-0-0 = reboot
+menu-0-0-exec = menu-open-1
+menu-0-1 = power off
+menu-0-1-exec = menu-open-2
+
+menu-1-0 = cancel
+menu-1-0-exec = menu-open-0
+menu-1-1 = reboot
+menu-1-1-exec = sudo reboot
+
+menu-2-0 = power off
+menu-2-0-exec = sudo poweroff
+menu-2-1 = cancel
+menu-2-1-exec = menu-open-0
+
+[module/demo]
+type = custom/ipc
+hook-0 = echo foobar
+hook-1 = date +%s
+hook-2 = whoami
+initial = 1
+click-left = "#demo.hook.0"
+click-right = "#demo.hook.1"
+double-click-left = "#demo.hook.2"
 
 [settings]
 screenchange-reload = true

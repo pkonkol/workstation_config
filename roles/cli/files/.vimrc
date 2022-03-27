@@ -15,6 +15,10 @@ autocmd BufWinEnter *.* silent loadview
 
 nnoremap <space> za
 
+if $TERM == 'alacritty'
+  set ttymouse=sgr
+endif
+
 let python_highlight_all = 1
 
 set list listchars=tab:▷⋅,trail:⋅,nbsp:⋅

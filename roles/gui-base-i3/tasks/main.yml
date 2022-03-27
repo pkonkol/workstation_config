@@ -38,9 +38,13 @@
       - feh
       - terminus-font
       - thunar
+      - w3m
+      - pulseaudio
+      - pavucontrol
   become: true
 
 - name: Additional packages from aur
+  when: ansible_fact["os_family"] == "Archlinux"
   kewlfft.aur.aur:
     name: "{{ item }}"
   become: true
@@ -50,6 +54,13 @@
     - polybar
     - tamzen-font
     - nerd-fonts-anonymous-pro
+
+- name: Clone ranger_devicons plugin repo
+  git:
+    repo: https://github.com/alexanderjeurissen/ranger_devicons
+    dest: /home/{{ username }}/.config/ranger/plugins/ranger_devicons
+  become: true
+  become_user: "{{ username }}"
 
 - name: Copy dotfiles
   ansible.builtin.copy:
@@ -76,6 +87,7 @@
       - { s: "files/.themes", d: "/home/{{username}}" }
       - { s: "files/.config/gtk-3.0", d: "/home/{{username}}/.config" }
       - { s: "files/.gtkrc-2.0", d: "/home/{{username}}/" }
+      - { s: "files/.config/ranger", d: "/home/{{username}}/.config" }
   become: true
 
 - name: Copy root dotfiles
@@ -126,6 +138,7 @@
   become: true
 
 - name: Gui utils from aur
+  when: ansible_fact["os_family"] == "Archlinux"
   kewlfft.aur.aur:
     name: "{{ item }}"
   become: true

@@ -26,16 +26,19 @@ ansible-galaxy collection install -r requirements.yml
 
 1. Use on localhost
   * If using `vagrant ssh` then `cd /home/vagrant/workstation-config`
-  * `ansible-playbook -i 127.0.0.1, -c local -v arch-cli.yml` for CLI only or
-  * `ansible-playbook -i 127.0.0.1, -c local -v arch-gui.yml` for both CLI and
+  * `ansible-playbook -i 127.0.0.1, -c local -v playbook.yml --tags core` for CLI only or
+  * `ansible-playbook -i 127.0.0.1, -c local -v playbook.yml --tags core,gui` for both CLI and
     gui with i3 configuration
+
+1. Use through ansible-pull
+   `ansible-pull -U https://github.com/pkonkol/workstation_config -i 127.0.0.1, -c local -v playbook.yml`
 
 # Usage for Ubuntu
 
 1. `cd Ubuntu && vagrant up`
 1. `vagrant ssh`
 1. `cd /home/vagrant/workstation-config`
-1. `ansible-playbook -i 127.0.0.1, -c local -v ubuntu-cli.yml` 
+1. `ansible-playbook -i 127.0.0.1, -c local -v playbook.yml --tags cli` 
    *** Not working atm because of hardcoded pacman use in >core ***
 
 # TODO
