@@ -7,4 +7,19 @@
   with_items:
     - vlc
     - audacity
+    - chromium
+    - code
+    - firefox
+    - keepass
+    - gedit
+    - calibre
   become: true
+
+- name: Gui utils from aur
+  when: ansible_fact["os_family"] == "Archlinux"
+  kewlfft.aur.aur:
+    name: "{{ item }}"
+  become: true
+  become_user: "{{ username }}"
+  with_items:
+    - obsidian

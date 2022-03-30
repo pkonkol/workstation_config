@@ -9,8 +9,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "shell", privileged: false, inline: "echo '[defaults]\nnocows=True\nask_valut_pass=True' > /home/vagrant/.ansible.cfg"
   config.vm.provision "shell", inline: "ls && id -a && pacman -Syu --noconfirm python ansible net-tools"
-  config.vm.provision "shell", privileged: false, inline: "ansible-galaxy collection install community.general"
-  config.vm.provision "shell", privileged: false, inline: "ansible-galaxy collection install kewlfft.aur"
+  # config.vm.provision "shell", privileged: false, inline: "ansible-galaxy collection install community.general"
+  # config.vm.provision "shell", privileged: false, inline: "ansible-galaxy collection install kewlfft.aur"
   # if Vagrant::Util::Platform.windows?
     # didn't work anwyway
     #config.vm.provision "shell", inline: "chown -R vagrant /home/vagrant/.ansible && chgrp !* "
@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
       vbox.memory = 2048
       vbox.cpus = 1
       vbox.gui = true
-      config.disksize.size = "50GB"
+      config.disksize.size = "40GB"
     end
   end
 end

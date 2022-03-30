@@ -107,6 +107,16 @@
     - "/home/{{username}}/.config/polybar/launch.sh"
   become: true
 
+- name: Install basic gui utils
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - arandr
+    - kitty
+    - alacritty
+  become: true
+
 # - name: Install Ly Display Manager
 #   kewlfft.aur.aur:
 #     name: ly
@@ -118,30 +128,3 @@
 #     state: started
 #     enabled: yes
 #   become: true
-
-#- name: Install gui tools
-
-- name: Install basic gui utils
-  ansible.builtin.package:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - arandr
-    - kitty
-    - alacritty
-    - chromium
-    - code
-    - keepass
-    - firefox
-    - gedit
-    - calibre
-  become: true
-
-- name: Gui utils from aur
-  when: ansible_fact["os_family"] == "Archlinux"
-  kewlfft.aur.aur:
-    name: "{{ item }}"
-  become: true
-  become_user: "{{ username }}"
-  with_items:
-    - obsidian

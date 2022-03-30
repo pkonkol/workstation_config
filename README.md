@@ -26,25 +26,22 @@ ansible-galaxy collection install -r requirements.yml
 
 1. Use on localhost
   * If using `vagrant ssh` then `cd /home/vagrant/workstation-config`
-  * `ansible-playbook -i 127.0.0.1, -c local -v playbook.yml --tags core` for CLI only or
-  * `ansible-playbook -i 127.0.0.1, -c local -v playbook.yml --tags core,gui` for both CLI and
+  * `ansible-playbook -i 127.0.0.1, -c local -v main.yml --tags core` for CLI only or
+  * `ansible-playbook -i 127.0.0.1, -c local -v main.yml --tags core,gui` for both CLI and
     gui with i3 configuration
 
 1. Use through ansible-pull
-   `ansible-pull -U https://github.com/pkonkol/workstation_config -i 127.0.0.1, -c local -v playbook.yml`
+   `ansible-pull -U https://github.com/pkonkol/workstation_config -i 127.0.0.1, -c local -v main.yml`
 
 # Usage for Ubuntu
 
 1. `cd Ubuntu && vagrant up`
 1. `vagrant ssh`
 1. `cd /home/vagrant/workstation-config`
-1. `ansible-playbook -i 127.0.0.1, -c local -v playbook.yml --tags cli` 
-   *** Not working atm because of hardcoded pacman use in >core ***
+1. `ansible-playbook -i 127.0.0.1, -c local -v main.yml --tags core` 
 
 # TODO
  So i don't forget
- - i3 ricing
- - support for ubuntu in CLI/core/dev roles
+ - i3 ricing (usable but not pretty for now)
  - speed up zsh loading (zplug is too slow)
  - move package lists from role file to group vars
- - use ansible-vaults for secrets

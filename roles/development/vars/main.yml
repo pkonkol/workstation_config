@@ -1,0 +1,23 @@
+---
+
+dev_packages: &op
+  - python
+  - docker
+  - virtualbox
+  - nmap
+  - vagrant
+  - nodejs
+
+arch_dev_packages:
+  - *op
+  - go
+  - python-pip
+  - veracrypt
+
+ubuntu_dev_packages:
+  - *op
+  - python3-pip
+
+ubuntu_dev_snap_packages:
+  - go
+  - notepad-plus-plus

@@ -32,44 +32,50 @@
   become: true
 
 - name: Update packages
-  when: ansible_facts["os_family"] == "Archlinux"
+  when: ansible_facts["os_family"]|lower == "archlinux"
   community.general.pacman:
     update_cache: yes
   become: true
 
 - name: upgrade packages
-  when: ansible_facts["os_family"] == "Archlinux"
+  when: ansible_facts["os_family"]|lower == "archlinux"
   community.general.pacman:
     upgrade: yes
   become: true
 
 - name: update & upgrade ubuntu
-  when: ansible_facts["os_family"] == "Ubuntu"
+  when: ansible_facts["os_family"]|lower == "debian"
   apt:
     update_cache: yes
     upgrade: yes
   become: true
 
-- name: Install official packages
+- name: Install core ubuntu packages
+  when: ansible_facts["os_family"]|lower == "debian"
   package:
     name: "{{ item }}"
     state: present
   with_items:
-    - python3
-    - python-pip
-    - base-devel
-    - htop
-    - openvpn
-    - git
-    - tree
+    - "{{ ubuntu_core_packages|flatten }}"
+  become: true
+
+- name: Install core arch packages
+  when: ansible_facts["os_family"]|lower == "archlinux"
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ arch_core_packages|flatten }}"
   become: true
 
 - name: Check if yay installed
+  when: ansible_facts["os_family"]|lower == "archlinux"
   command: 'which yay'
   register: yay_installed
   ignore_errors: yes
 
 - name: Install yay
+  when: ansible_facts["os_family"]|lower == "archlinux" and yay_installed.rc != 0 
   shell:
     cmd: |
       pwd
@@ -80,11 +86,18 @@
     executable: /bin/bash
     creates: /usr/bin/yay
   register: log_yay
-  when: yay_installed.rc != 0
 
 - assert:
     that:
      - "'error' not in log_yay"
+
+- name: Update alternatives on Ubuntu
+  when: ansible_facts["os_family"]|lower == "debian"
+  alternatives:
+    name: python
+    link: /usr/bin/python
+    path: /usr/bin/python3
+  become: true
 
 - name: Install pip packages
   pip:
@@ -96,6 +109,7 @@
   become_user: "{{ username }}"
 
 - name: Install network manager & applet
+  when: ansible_facts["os_family"]|lower == "archlinux"
   package:
     name: "{{ item }}"
     state: present
