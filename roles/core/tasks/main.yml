@@ -24,7 +24,7 @@
     validate: 'visudo -cf %s'
   become: true
 
-- name: Ensure that {{ username }} can run pacman wihout password
+- name: Ensure that {{ username }} can run pacman without password
   when: ansible_facts["os_family"]|lower == "archlinux"
   lineinfile:
     path: /etc/sudoers.d/11-install-aur_builder

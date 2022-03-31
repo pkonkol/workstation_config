@@ -18,3 +18,4 @@ ubuntu_core_packages:
   - build-essential 
   - python3-pip
   - acl
+  - curl
