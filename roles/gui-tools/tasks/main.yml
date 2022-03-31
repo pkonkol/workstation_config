@@ -13,6 +13,8 @@
     - keepass
     - gedit
     - calibre
+    - kitty
+    - alacritty
   become: true
 
 - name: Gui utils from aur

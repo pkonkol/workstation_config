@@ -1,6 +1,6 @@
 ---
 
-- name: Install arch packages
+- name: Install arch dev packages
   when: ansible_facts["os_family"]|lower == "archlinux"
   package:
     name: "{{ item }}"

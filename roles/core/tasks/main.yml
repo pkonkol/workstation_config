@@ -16,7 +16,7 @@
     groups: docker,wheel
   become: true
 
-- name: Ensuring that wheel is able to use sudo without password
+- name: Ensure that wheel is able to use sudo without password
   lineinfile:
     path: /etc/sudoers
     regexp: '^%wheel'
@@ -24,7 +24,9 @@
     validate: 'visudo -cf %s'
   become: true
 
-- lineinfile:
+- name: Ensure that {{ username }} can run pacman wihout password
+  when: ansible_facts["os_family"]|lower == "archlinux"
+  lineinfile:
     path: /etc/sudoers.d/11-install-aur_builder
     line: '{{ username }} ALL=(ALL) NOPASSWD: /usr/bin/pacman'
     create: yes
@@ -91,7 +93,7 @@
     that:
      - "'error' not in log_yay"
 
-- name: Update alternatives on Ubuntu
+- name: Ubuntu set python3 as default
   when: ansible_facts["os_family"]|lower == "debian"
   alternatives:
     name: python
