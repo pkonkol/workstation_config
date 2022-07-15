@@ -1,6 +1,6 @@
 Vagrant.configure("2") do |config|
   USE_GUI = true
-  config.vm.box = "terrywang/archlinux"
+  config.vm.box = "archlinux/archlinux"
 
   #config.vm.network "private_network", ip: "172.28.128.100"
   # mount below only after running core role
@@ -22,10 +22,10 @@ Vagrant.configure("2") do |config|
   # end
   config.vm.provider "virtualbox" do |vbox|
     if USE_GUI
-      vbox.memory = 2048
-      vbox.cpus = 1
+      vbox.memory = 4096
+      vbox.cpus = 4
       vbox.gui = true
-      config.disksize.size = "40GB"
+      config.disksize.size = "50GB"
     end
   end
 end

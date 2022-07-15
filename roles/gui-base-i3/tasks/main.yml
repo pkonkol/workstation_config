@@ -42,6 +42,10 @@
       - pavucontrol
       - arandr
       - terminus-font
+      - yad
+      - xdotool
+      - conky
+      - clipmenu
   become: true
 
 - name: Additional packages from aur
@@ -69,6 +73,7 @@
     owner: "{{ username }}"
     group: "{{ username }}"
     mode: '0644'
+  become: true
   with_items:
       - { s: "files/.Xresources" , d: "/home/{{username}}/" }
       - { s: "files/.xsettingsd" , d: "/home/{{username}}/" }
@@ -77,6 +82,8 @@
       - { s: "files/.gtkrc-2.0", d: "/home/{{username}}/" }
 
       - { s: "files/.config/i3/config", d: "/home/{{username}}/.config/i3/" }
+      - { s: "files/.config/jgmenu", d: "/home/{{username}}/.config/" }
+      - { s: "files/.config/conky", d: "/home/{{username}}/.config/" }
       - { s: "files/.config/dunst/dunstrc" , d: "/home/{{username}}/.config/dunst/" }
       - { s: "files/.config/picom.conf" , d: "/home/{{username}}/.config/" }
       - { s: "files/.config/oomox/colors/srcery", d: "/home/{{username}}/.config/oomox/colors/" }
@@ -89,6 +96,25 @@
       - { s: "files/.config/polybar", d: "/home/{{username}}/.config/" }
       - { s: "files/.config/ranger", d: "/home/{{username}}/.config" }
       - { s: "files/.config/gtk-3.0", d: "/home/{{username}}/.config" }
+
+- name: Copy local bin
+  ansible.builtin.copy:
+    src: "{{ item.s }}"
+    dest: "{{ item.d }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: '0644'
+  become: true
+  with_items:
+      - { s: "files/.local/bin", d: "/home/{{username}}/.local/" }
+
+- name: Chmod +x for scripts
+  file: dest="{{item}}" mode="ug+x"
+  with_items:
+    - "/home/{{username}}/.config/polybar/launch.sh"
+    - "/home/{{username}}/.local/bin/polybar-popup-calendar.sh"
+    - "/home/{{username}}/.local/bin/rofi-power-menu"
+    - "/home/{{username}}/.local/bin/save_dotfiles.sh"
   become: true
 
 - name: Copy root dotfiles
@@ -102,8 +128,3 @@
     - { s: "files/xinitrc", d: "/etc/X11/xinit/" }
   become: true
 
-- name: Chmod +x for scripts
-  file: dest="{{item}}" mode="ug+x"
-  with_items:
-    - "/home/{{username}}/.config/polybar/launch.sh"
-  become: true

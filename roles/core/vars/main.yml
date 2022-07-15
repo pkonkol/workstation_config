@@ -7,11 +7,14 @@ official_packages: &op
   - openvpn
   - git
   - tree
+  - ranger
 
 arch_core_packages:
   - "{{ official_packages }}"
   - python-pip
   - base-devel
+  - fd
+  - fzf
 
 ubuntu_core_packages:
   - *op

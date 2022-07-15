@@ -18,7 +18,7 @@
   become: true
 
 - name: Gui utils from aur
-  when: ansible_fact["os_family"] == "Archlinux"
+  when: ansible_facts["os_family"] == "Archlinux"
   kewlfft.aur.aur:
     name: "{{ item }}"
   become: true

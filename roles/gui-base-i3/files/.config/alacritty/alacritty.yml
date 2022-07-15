@@ -40,6 +40,11 @@ scrolling:
 
 window:
   opacity: 0.5
+  padding:
+    x: 1
+    y: 2
+  dunamic_padding: true
+  decorations: full
 
 font:
   normal:

@@ -40,16 +40,16 @@ if [ ! -d $CACHEDIR ]; then
   mkdir -p $CACHEDIR
 fi
 
+source /usr/share/zsh/share/antigen.zsh
+antigen bundle "zsh-users/zsh-completions"
+antigen bundle "zsh-users/zsh-autosuggestions"
+antigen bundle "zsh-users/zsh-history-substring-search"
+antigen bundle "zsh-users/zsh-syntax-highlighting"
+antigen bundle "jeffreytse/zsh-vi-mode"
 
-zplug "jeffreytse/zsh-vi-mode"
-zplug "pkonkol/zshfish", as:theme, defer:1
-zplug "zsh-users/zsh-completions", from:github
-zplug "zsh-users/zsh-autosuggestions", from:github
-zplug "zsh-users/zsh-history-substring-search", from:github, defer:1
-zplug "zsh-users/zsh-syntax-highlighting", from:github, defer:2
+antigen theme jackharrisonsherlock/common
 
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-zplug load --verbose
+antigen apply
 
 
 ZSH_AUTOSUGGEST_USE_ASYNC=True

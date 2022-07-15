@@ -25,32 +25,44 @@ include-file = $HOME/.config/polybar/srcery
 inherit = bar/srcery
 monitor = ${env:MONITOR}
 width = 100%
-height = 18
+height = 20
 offset-y = 0
 offset-x = 0
 radius = 0
 fixed-center = true
 line-size = 1
-border-size = 5
+border-size = 0
+border-top-size = 4
+border-left-size = 5
+border-right-size = 5
 ; border-color = ${color.red}
 border-bottom-size = 0
-padding-left = 2
-padding-right = 2
+padding-left = 1
+padding-right = 1
 module-margin-left = 1
 module-margin-right = 1
-modules-left = i3
-modules-center = xwindow
+modules-left = powermenu jgmenu i3 xwindow
+# modules-center = xbacklight
 ; wm-restack = i3
-modules-right = pulseaudio root wifi cpu mem battery date powermenu
+modules-right = backlight pulseaudio root wifi cpu mem battery popup-calendar 
 cursor-click = pointer
 cursor-scroll = ns-resize
 bottom=false
-font-0 = "TamzenForPowerline:pixelsize=20;2"
-font-1 = "Tamzen:pixelsize=20;2"
+font-0 = "Terminus:pixelsize=16;3"
+font-1 = "Symbols Nerd Font:pixelsize=15;3"
 tray-position = right
+tray-padding = 0
+tray-maxsize = 16
 dpi-x = 0
 dpi-y = 0
 enable-ipc = true
+# click-left = "jgmenu_run >/dev/null 2>&1 &"
+
+[module/jgmenu]
+type = custom/text
+content-padding = 0
+content = ""
+click-left = "jgmenu_run >/dev/null 2>&1 &"
 
 [module/i3]
 inherit=module/srcery
@@ -94,12 +106,15 @@ label-separator = |
 
 [module/xwindow]
 type = internal/xwindow
-label = %title:0:30:...%
+label = " %title:0:30:...% "
+label-background = ${color.bright_black}
+label-foreground = ${color.yellow}
+label-underline = ${color.red}
 
 [module/wifi]
 type = internal/network
 interface = eth0
-label-connected = net: %downspeed%
+label-connected = 直%local_ip%
 format-connected = <label-connected>
 
 [module/battery]
@@ -112,30 +127,42 @@ poll-interval = 5
 format-charging = <label-charging>
 format-full = <label-full>
 format-discharging = <label-discharging>
-label-charging = bat:(+)%percentage%%
-label-full = bat:%percentage%%
-label-discharging = bat:(-)%percentage%%
+label-charging =   %percentage%%
+label-full = %percentage%%
+label-discharging = %percentage%%
 
+[module/backlight]
+type = internal/backlight
+# card = intel_backlight # todo set correct
+enable-scroll = true
 
-[module/mic]
-inherit=module/srcery
-type = custom/ipc
-hook-0 = $HOME/Git/dots/scripts/mic.sh
-initial = 1
-click-left = amixer sset Capture toggle && polybar-msg -p %pid% hook mic 1
+format = <ramp><label>
+
+ramp-0 =  ""
+ramp-1 =  ""
+ramp-2 =  ""
+
+label = %percentage%%
+
 
 [module/pulseaudio]
 type = internal/pulseaudio
-use-ui-max = false
+use-ui-max = true
 interval = 5
-label-volume = vol:%percentage%%
-label-muted-foreground = ${srcery-colors.magenta}
-format-volume = <label-volume>
+label-volume = %percentage%%
+
+ramp-volume-0 = 奄
+ramp-volume-1 = 奔
+ramp-volume-2 = 墳
+
+label-muted = ﱝ%percentage%%
+label-muted-foreground = ${srcery-colors.red}
+format-volume = <ramp-volume><label-volume>
 click-right = pavucontrol &
 
 [module/home]
-inherit=module/srcery
 type=internal/fs
+inherit=module/srcery
 intervall=25
 mount-0=/home
 label-mounted = home:%{T2}%percentage_used%%%{T-}
@@ -143,86 +170,51 @@ format-mounted = <label-mounted>
 format-unmounted = <label-unmounted>
 
 [module/root]
-inherit=module/srcery
 type=internal/fs
+inherit=module/srcery
 intervall=25
 mount-0=/
-label-mounted = root:%{T2}%percentage_used%%%{T-}
+label-mounted = %{T2}%percentage_used:2%%%{T-}
 format-mounted = <label-mounted>
 format-unmounted = <label-unmounted>
 
 [module/title]
-inherit=module/srcery
 type = internal/xwindow
+inherit=module/srcery
 format = <label>
 format-padding = 0
 label = "%{T2}%title%%{T-}"
 label-maxlen = 40
 
 [module/cpu]
-inherit=module/srcery
 type = internal/cpu
+inherit=module/srcery
 interval = 2
-; format-prefix = " "
-label = cpu:%percentage:2%%
+label = %percentage%%
 format = <label>
 
 [module/mem]
-inherit=module/srcery
 type = internal/memory
-interval = 2
-; format-prefix = " "
-label = mem:%percentage_used%%
-format = <label>
-
-[module/date]
 inherit=module/srcery
-type = internal/date
-interval = 5
-date = "%Y-%m-%d"
-date-alt = "%d/%m/%Y"
-time = %H:%M
-time-alt = [%H:%M:%S]
-label = %date% %time%
+interval = 2
+label = %gb_free%
+label-warn = %gb_free%
+label-warn-foreground = ${color.red}
+format = <label>
+format-warn = <label>
+
+
+[module/popup-calendar]
+type = custom/script
+exec = ~/.local/bin/polybar-popup-calendar.sh
+interval = 1
+click-left = ~/.local/bin/polybar-popup-calendar.sh --popup &
 
 [module/powermenu]
-type = custom/menu
+type = custom/text
+click-left = "rofi -show power_menu -modi power_menu:rofi-power-menu &"
+content = ""
 
-expand-right = true
-
-format-spacing = 1
-
-label-open = power
-label-open-foreground = ${colors.secondary}
-label-close =  cancel
-label-close-foreground = ${colors.secondary}
-label-separator = |
-label-separator-foreground = ${colors.foreground-alt}
-
-menu-0-0 = reboot
-menu-0-0-exec = menu-open-1
-menu-0-1 = power off
-menu-0-1-exec = menu-open-2
-
-menu-1-0 = cancel
-menu-1-0-exec = menu-open-0
-menu-1-1 = reboot
-menu-1-1-exec = sudo reboot
-
-menu-2-0 = power off
-menu-2-0-exec = sudo poweroff
-menu-2-1 = cancel
-menu-2-1-exec = menu-open-0
-
-[module/demo]
-type = custom/ipc
-hook-0 = echo foobar
-hook-1 = date +%s
-hook-2 = whoami
-initial = 1
-click-left = "#demo.hook.0"
-click-right = "#demo.hook.1"
-double-click-left = "#demo.hook.2"
 
 [settings]
 screenchange-reload = true

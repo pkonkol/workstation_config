@@ -42,6 +42,5 @@ ansible-galaxy collection install -r requirements.yml
 
 # TODO
  So i don't forget
- - i3 ricing (usable but not pretty for now)
  - speed up zsh loading (zplug is too slow)
- - move package lists from role file to group vars
+ - move package lists from role file to group vars as map[packages][distro]

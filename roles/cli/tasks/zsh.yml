@@ -33,26 +33,34 @@
     shell: /usr/bin/zsh
   become: true
 
-- name: Check if zplug is installed
-  stat:
-    path: /home/{{username}}/.zplug
-  register: zplug_dir
+- name: Install antigen arch
+  when: ansible_facts["os_family"] == "Archlinux"
+  kewlfft.aur.aur:
+    name: antigen-git
   become: true
   become_user: "{{ username }}"
+  
 
-- name: Find zplug latest release
-  github_release:
-    user: zplug
-    repo: zplug
-    action: latest_release
-  become: true
-  become_user: "{{ username }}"
+# - name: Check if zplug is installed
+#   stat:
+#     path: /home/{{username}}/.zplug
+#   register: zplug_dir
+#   become: true
+#   become_user: "{{ username }}"
 
-# TODO change zplug to something reasonably fast
-- name: Install zplug
-  when: not (zplug_dir.stat.exists and zplug_dir.stat.isdir)
-  git:
-    repo: "https://github.com/zplug/zplug.git"
-    dest: /home/{{username}}/.zplug
-  become: true
-  become_user: "{{ username }}"
+# - name: Find zplug latest release
+#   github_release:
+#     user: zplug
+#     repo: zplug
+#     action: latest_release
+#   become: true
+#   become_user: "{{ username }}"
+
+# # TODO change zplug to something reasonably fast
+# - name: Install zplug
+#   when: not (zplug_dir.stat.exists and zplug_dir.stat.isdir)
+#   git:
+#     repo: "https://github.com/zplug/zplug.git"
+#     dest: /home/{{username}}/.zplug
+#   become: true
+#   become_user: "{{ username }}"

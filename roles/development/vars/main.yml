@@ -13,6 +13,7 @@ arch_dev_packages:
   - go
   - python-pip
   - veracrypt
+  - ranger
 
 ubuntu_dev_packages:
   - *op

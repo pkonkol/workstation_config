@@ -5,7 +5,7 @@
 
 configuration {
 
-	modi: "combi,calc,clipmenu:env CM_LAUNCHER=rofi-script clipmenu";
+	modi: "combi,run,filebrowser";
 
   /* Set the modi to combine in combi mode */
 	combi-modi: "window,drun";
@@ -13,7 +13,7 @@ configuration {
   /* Location on screen */
 	location: 0;
 
-	terminal: "kitty";
+	terminal: "alacritty";
 
 	sidebar-mode: true;
 
@@ -62,7 +62,7 @@ configuration {
   lines: 62;
 
   /* My font of choice, rofi does not respect DPI settings. */
-  font: "TamzenForPowerline";
+  font: "Terminus 12";
 
 }
 
