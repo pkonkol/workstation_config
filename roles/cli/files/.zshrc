@@ -1,6 +1,4 @@
 # Template for .zshrc
-source ~/.zplug/init.zsh
-
 # Custom $PATH
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 umask 022
@@ -9,6 +7,7 @@ export EDITOR=vim
 export VISUAL=vim
 export PAGER=less
 export TERMINAL=Alacritty
+export QT_QPA_PLATFORMTHEME=gtk2
 
 setopt no_beep
 setopt auto_pushd

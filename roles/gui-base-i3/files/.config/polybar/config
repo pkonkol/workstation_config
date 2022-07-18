@@ -23,7 +23,6 @@ include-file = $HOME/.config/polybar/srcery
 
 [bar/all]
 inherit = bar/srcery
-monitor = ${env:MONITOR}
 width = 100%
 height = 20
 offset-y = 0
@@ -35,28 +34,34 @@ border-size = 0
 border-top-size = 4
 border-left-size = 5
 border-right-size = 5
-; border-color = ${color.red}
 border-bottom-size = 0
 padding-left = 1
 padding-right = 1
 module-margin-left = 1
 module-margin-right = 1
-modules-left = powermenu jgmenu i3 xwindow
-# modules-center = xbacklight
-; wm-restack = i3
-modules-right = backlight pulseaudio root wifi cpu mem battery popup-calendar 
 cursor-click = pointer
 cursor-scroll = ns-resize
 bottom=false
 font-0 = "Terminus:pixelsize=16;3"
 font-1 = "Symbols Nerd Font:pixelsize=15;3"
-tray-position = right
-tray-padding = 0
-tray-maxsize = 16
 dpi-x = 0
 dpi-y = 0
 enable-ipc = true
-# click-left = "jgmenu_run >/dev/null 2>&1 &"
+monitor = ${env:MONITOR:}
+
+[bar/main]
+inherit=bar/all
+modules-left = powermenu jgmenu i3 xwindow
+modules-right = backlight pulseaudio root wifi cpu mem battery popup-calendar 
+tray-position = right
+tray-padding = 0
+tray-maxsize = 16
+
+[bar/side]
+inherit=bar/all
+modules-left = powermenu i3 xwindow
+modules-right = backlight pulseaudio root wifi cpu mem battery popup-calendar 
+
 
 [module/jgmenu]
 type = custom/text
@@ -99,6 +104,7 @@ label-visible-padding = ${self.label-focused-padding}
 ; urgent = Workspace with urgency hint set
 label-urgent = %name%
 label-urgent-background = ${color.yellow}
+label-urgent-foreground = ${color.black}
 label-urgent-underline = ${self.label-focused-underline}
 label-urgent-padding = 1
 
@@ -133,17 +139,13 @@ label-discharging = %percentage%%
 
 [module/backlight]
 type = internal/backlight
-# card = intel_backlight # todo set correct
+card = intel_backlight
 enable-scroll = true
-
 format = <ramp><label>
-
+label = %percentage%%
 ramp-0 =  ""
 ramp-1 =  ""
 ramp-2 =  ""
-
-label = %percentage%%
-
 
 [module/pulseaudio]
 type = internal/pulseaudio

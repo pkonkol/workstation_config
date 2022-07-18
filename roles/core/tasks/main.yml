@@ -88,6 +88,8 @@
     executable: /bin/bash
     creates: /usr/bin/yay
   register: log_yay
+  become: true
+  become_user: "{{username}}"
 
 - assert:
     that:

@@ -24,7 +24,7 @@ configuration {
   /*  based on X11 screen size (similar to i3 and GTK). If set to 1, it tries to */
   /*  auto-detect based on the size of the monitor that rofi is displayed on */
   /*  (similar to latest Qt 5). */
-	dpi: 1;
+	dpi: 0;
 
   /* Accept entry */
 	kb-accept-entry: "Return,KP_Enter";
@@ -56,10 +56,10 @@ configuration {
 	kb-page-next: "Page_Down";
 
   /* set the offset from top to be the height of my appbar at this host */
-  yoffset: 34;
+  // yoffset: 34;
 
   /* The lines needed to fill the screen, depends on font-size and DPI settings */
-  lines: 62;
+  // lines: 32;
 
   /* My font of choice, rofi does not respect DPI settings. */
   font: "Terminus 12";

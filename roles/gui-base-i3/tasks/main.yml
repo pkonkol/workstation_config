@@ -8,6 +8,7 @@
     - xorg-xsetroot
     - xorg-xinit
     - xorg-xrandr
+    - xorg-xinput
   become: true
 
 - name: Install i3 metapackages
@@ -39,6 +40,8 @@
       - thunar
       - w3m
       - pulseaudio
+      - pulseaudio-alsa
+      - alsa-utils
       - pavucontrol
       - arandr
       - terminus-font
@@ -46,6 +49,12 @@
       - xdotool
       - conky
       - clipmenu
+      - ttf-nerd-fonts-symbols-mono
+      - jgmenu
+      - brightnessctl
+      - flameshot
+      - perl-anyevent-i3
+      - pasystray
   become: true
 
 - name: Additional packages from aur
@@ -56,8 +65,9 @@
   with_items:
     - themix-full-git
     - polybar
-    - tamzen-font
     - nerd-fonts-anonymous-pro
+    - qt5-styleplugins
+    - qt6gtk2
 
 - name: Clone ranger_devicons plugin repo
   git:
@@ -66,7 +76,7 @@
   become: true
   become_user: "{{ username }}"
 
-- name: Copy dotfiles
+- name: copy home dotfiles
   ansible.builtin.copy:
     src: "{{ item.s }}"
     dest: "{{ item.d }}"
@@ -81,6 +91,15 @@
       - { s: "files/.themes", d: "/home/{{username}}" }
       - { s: "files/.gtkrc-2.0", d: "/home/{{username}}/" }
 
+- name: copy config dotfiles
+  ansible.builtin.copy:
+    src: "{{ item.s }}"
+    dest: "{{ item.d }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: '0644'
+  become: true
+  with_items:
       - { s: "files/.config/i3/config", d: "/home/{{username}}/.config/i3/" }
       - { s: "files/.config/jgmenu", d: "/home/{{username}}/.config/" }
       - { s: "files/.config/conky", d: "/home/{{username}}/.config/" }
@@ -96,8 +115,18 @@
       - { s: "files/.config/polybar", d: "/home/{{username}}/.config/" }
       - { s: "files/.config/ranger", d: "/home/{{username}}/.config" }
       - { s: "files/.config/gtk-3.0", d: "/home/{{username}}/.config" }
+      - { s: "files/.config/Trolltech.conf", d: "/home/{{username}}/.config/" }
 
-- name: Copy local bin
+- name: copy icons
+  become: true
+  ansible.builtin.copy:
+    src: "files/.icons"
+    dest: "/home/{{username}}/"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: '0644'
+
+- name: copy local bin
   ansible.builtin.copy:
     src: "{{ item.s }}"
     dest: "{{ item.d }}"

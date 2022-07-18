@@ -8,7 +8,7 @@
     - vlc
     - audacity
     - chromium
-    - code
+    # - code
     - firefox
     - keepass
     - gedit
@@ -25,3 +25,4 @@
   become_user: "{{ username }}"
   with_items:
     - obsidian
+    - visual-studio-code-bin

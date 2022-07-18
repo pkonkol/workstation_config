@@ -7,6 +7,9 @@ dev_packages: &op
   - nmap
   - vagrant
   - nodejs
+  - kubectl
+  - helm
+  - minikube
 
 arch_dev_packages:
   - *op
@@ -14,6 +17,7 @@ arch_dev_packages:
   - python-pip
   - veracrypt
   - ranger
+  - tealdeer
 
 ubuntu_dev_packages:
   - *op

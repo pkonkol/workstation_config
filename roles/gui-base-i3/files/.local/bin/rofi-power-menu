@@ -38,9 +38,9 @@ icons[shutdown]="\uf011"
 icons[cancel]="\u00d7"
 
 declare -A actions
-actions[lockscreen]="loginctl lock-session ${XDG_SESSION_ID-}"
+actions[lockscreen]="i3lock -c 1c1b19"
 #actions[switchuser]="???"
-actions[logout]="loginctl terminate-session ${XDG_SESSION_ID-}"
+actions[logout]="i3-msg exit"
 actions[suspend]="systemctl suspend"
 actions[hibernate]="systemctl hibernate"
 actions[reboot]="systemctl reboot"

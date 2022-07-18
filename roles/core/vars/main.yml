@@ -8,6 +8,7 @@ official_packages: &op
   - git
   - tree
   - ranger
+  - inxi
 
 arch_core_packages:
   - "{{ official_packages }}"
