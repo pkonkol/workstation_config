@@ -38,9 +38,9 @@ icons[shutdown]="\uf011"
 icons[cancel]="\u00d7"
 
 declare -A actions
-actions[lockscreen]="i3lock -c 1c1b19"
+actions[lockscreen]="loginctl lock-session"
 #actions[switchuser]="???"
-actions[logout]="i3-msg exit"
+actions[logout]="i3-msg exit && exit"
 actions[suspend]="systemctl suspend"
 actions[hibernate]="systemctl hibernate"
 actions[reboot]="systemctl reboot"

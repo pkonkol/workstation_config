@@ -15,6 +15,7 @@
     - calibre
     - kitty
     - alacritty
+    - libreoffice-still
   become: true
 
 - name: Gui utils from aur

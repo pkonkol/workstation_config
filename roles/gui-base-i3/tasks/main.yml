@@ -25,36 +25,38 @@
     name: "{{ item }}"
     state: present
   with_items:
-      - dunst
-      - volumeicon
-      - picom
-      - xsel
-      - rofi
-      - rofi-calc
-      - scrot
-      - viewnior
-      - xsettingsd
-      - hsetroot
-      - lxappearance
-      - feh
-      - thunar
-      - w3m
-      - pulseaudio
-      - pulseaudio-alsa
-      - alsa-utils
-      - pavucontrol
-      - arandr
-      - terminus-font
-      - yad
-      - xdotool
-      - conky
-      - clipmenu
-      - ttf-nerd-fonts-symbols-mono
-      - jgmenu
-      - brightnessctl
-      - flameshot
-      - perl-anyevent-i3
-      - pasystray
+    - dunst
+    - volumeicon
+    - picom
+    - xsel
+    - rofi
+    - rofi-calc
+    - scrot
+    - viewnior
+    - xsettingsd
+    - hsetroot
+    - lxappearance
+    - feh
+    - thunar
+    - w3m
+    - pulseaudio
+    - pulseaudio-alsa
+    - alsa-utils
+    - pavucontrol
+    - arandr
+    - terminus-font
+    - yad
+    - xdotool
+    - conky
+    - clipmenu
+    - ttf-nerd-fonts-symbols-mono
+    - jgmenu
+    - brightnessctl
+    - flameshot
+    - perl-anyevent-i3
+    - pasystray
+    - noto-fonts
+    - redshift
   become: true
 
 - name: Additional packages from aur
@@ -144,6 +146,7 @@
     - "/home/{{username}}/.local/bin/polybar-popup-calendar.sh"
     - "/home/{{username}}/.local/bin/rofi-power-menu"
     - "/home/{{username}}/.local/bin/save_dotfiles.sh"
+    - "/home/{{username}}/.local/bin/dpms-notifier.sh"
   become: true
 
 - name: Copy root dotfiles

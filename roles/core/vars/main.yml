@@ -16,6 +16,7 @@ arch_core_packages:
   - base-devel
   - fd
   - fzf
+  - usbutils
 
 ubuntu_core_packages:
   - *op

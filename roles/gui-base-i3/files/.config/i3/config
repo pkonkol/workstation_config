@@ -26,10 +26,10 @@ exec_always --no-startup-id "picom --config ~/.config/picom.conf"
 exec_always --no-startup-id "~/.config/polybar/launch.sh"
 # exec --no-startup-id hsetroot -solid "$black"
 exec_always --no-startup-id feh --randomize --bg-fill ~/.wallpapers/*
-exec_always --no-startup-id xinput set-prop 11 "libinput Accel Speed" 1
+exec_always --no-startup-id xinput set-prop "TPPS/2 IBM TrackPoint" "libinput Accel Speed" 1
 
 exec --no-startup-id dunst
-exec --no-startup-id redshift
+exec --no-startup-id redshift -l 54.3:18.6 -t 6500:4000
 exec --no-startup-id conky
 exec --no-startup-id clipmenud
 exec --no-startup-id pasystray &
@@ -39,7 +39,7 @@ bindsym $mod+i exec firefox
 bindsym --release Print exec --no-startup-id "flameshot full -p ~/Pictures/Screenshots"
 bindsym --release $mod+Print exec --no-startup-id "flameshot screen -p ~/Pictures/Screenshots"
 bindsym --release $mod+Shift+Print exec --no-startup-id scrot -u ~/Pictures/Screenshots/%Y-%m-%d-%T-scrot-window.png -e 'notify-send -a scrot --hint=string:x-dunst-stack-tag:scrot saved active window to $f'
-bindsym --release $mod+Shift+s exec --no-startup-id scrot -s ~/Pictures/Screenshots/%Y-%m-%d-%T-scrot-sel.png -e 'notify-send -a scrot --hint=string:x-dunst-stack-tag:scrot saved selected to $f'
+bindsym --release $mod+Shift+s exec --no-startup-id flameshot gui --path ~/Pictures/Screenshots
 
 # Rofi
 bindsym $mod+Tab   exec --no-startup-id "rofi -show combi -show-icons"
@@ -57,8 +57,24 @@ exec --no-startup-id nm-applet
 # they are included here as an example. Modify as you see fit.
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec --no-startup-id xss-lock --transfer-sleep-lock ~/.local/bin/dpms-notifier.sh
 
+# exec --no-startup-id xidlehook --not-when-fullscreen --not-when-audio --timer normal 600 'loginctl lock-session' ''
+exec --no-startup-id xidlehook \
+    --not-when-fullscreen \
+    --not-when-audio \
+    --timer 300 \
+    'brightnessctl s 20%;notify-send "Locking in 4 minutes" " "' \
+    'brightnessctl s 100%' \
+    --timer 120 \
+    'brightnessctl s 2%;notify-send -t 120000 "Locking in 120 seconds"' \
+    'brightnessctl s 100%' \
+    --timer 120 \
+    'loginctl lock-session' \
+    'brightnessctl s 100%' \
+    --timer 300 \
+    'loginctl lock-session; systemctl suspend' \
+    'brightnessctl s 100%' 
 
 
 # srcery-colors (https://github.com/srcery-colors/srcery-gui/blob/master/i3wm/i3-config)
@@ -298,9 +314,15 @@ bindsym $mod+Ctrl+less move workspace to output left
 
 workspace $ws11 output HDMI2
 
+bindsym $mod+p [instance="^Alacritty-scratch"] scratchpad show
+for_window [instance="^Alacritty-scratch"] move scratchpad
+exec alacritty --class Alacritty-scratch -e zsh -c 'tmux new-session -A -s scratchpad'
+
 for_window [class="Pavucontrol"] floating enable, border normal
 for_window [class="Arandr"] floating enable, border normal
 for_window [class="flameshot"] floating enable, border normal
+for_window [class="System-config-printer.py"] floating enable, border normal
+
 for_window [class="Conky"] border none
 for_window [all] title_window_icon padding 1px
 
@@ -323,6 +345,7 @@ for_window [class="discord"] move to workspace $ws9
 exec --no-startup-id telegram-desktop
 exec --no-startup-id caprine
 exec --no-startup-id discord
+
 
 
 gaps inner 3

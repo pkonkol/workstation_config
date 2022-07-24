@@ -18,6 +18,7 @@ arch_dev_packages:
   - veracrypt
   - ranger
   - tealdeer
+  - rust
 
 ubuntu_dev_packages:
   - *op

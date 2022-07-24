@@ -1,10 +1,37 @@
 ---
 
 - name: Install TLP
-  meta: noop
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  become: true
+  with_items:
+    - tlp
+    - powertop
+
+- name: enable tlp
+  become: true
+  systemd:
+    name: tlp.service
+    state: started
+    enabled: yes
+  
+
+- name: mask rfkill for tlp
+  become: true
+  systemd:
+    name: "{{item}}"
+    masked: yes
+  with_items:
+    - systemd-rfkill.service
+    - systemd-rfkill.socket
 
 - name: Configure fingerprint reader
-  meta: noop
+  become: true
+  become_user: "{{ username }}"
+  kewlfft.aur.aur:
+    name: python-validity 
+  
 
 - name: Install laptop packages
   ansible.builtin.package:
@@ -17,6 +44,7 @@
     - caprine
     - acpi
     - fprintd
+    - rclone
 
 - name: Install t480 packages
   ansible.builtin.package:
@@ -53,13 +81,6 @@
     insertafter: "^#load-module module-pipe-sink"
     line: load-module module-alsa-sink device=hw:0,7
 
-- name: udev hibernate on low battery
-  become: true
-  copy:
-    dest: /etc/udev/rules.d/90-backlight.rules
-    content: |
-      SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="[0-5]", RUN+="/usr/bin/systemctl hibernate"
-
 - name: install bluez
   become: true
   ansible.builtin.package:
@@ -68,3 +89,46 @@
   with_items:
     - bluez
     - bluez-utils
+
+- name: printer packages
+  become: true
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - cups
+    - ghostscript
+    - system-config-printer
+    - foomatic-db-engine
+    - foomatic-db
+    - foomatic-db-ppds
+
+- name: HL-1110 drivers
+  become: true
+  become_user: "{{ username }}"
+  kewlfft.aur.aur:
+    name: brlaser-git 
+    # name: brother-hl1118
+
+- name: edit logind.conf
+  become: true
+  lineinfile:
+    path: /etc/systemd/logind.conf
+    regexp: "{{ regexp }}"
+    line: "{{ line }}"
+  with_items:
+    - {regexp: HandlePowerKey , line: HandlePowerKey=ignore }
+    - {regexp: HandlePowerKeyLongPress , line: HandlePowerKeyLongPress=hibernate }
+    - {regexp: HandleLidSwitch , line: HandleLidSwitch=suspend-then-hibernate }
+    - {regexp: HandleLidSwitchExternalPower , line: HandleLidSwitchExternalPower=ignore }
+    - {regexp: HandleLidSwitchDocked , line: HandleLidSwitchDocked=ignore }
+    - {regexp: HoldoffTimeoutSec , line: HoldoffTimeoutSec=120s }
+
+
+# TODO this as a service and timer
+# - name: udev hibernate on low battery
+#   become: true
+#   copy:
+#     dest: /etc/udev/rules.d/80-hibernate.rules
+#     content: |
+#       SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="[0-5]", RUN+="/usr/bin/systemctl hibernate"
