@@ -16,6 +16,8 @@
     - kitty
     - alacritty
     - libreoffice-still
+    - mpd
+    - ncmpcpp
   become: true
 
 - name: Gui utils from aur
@@ -27,3 +29,22 @@
   with_items:
     - obsidian
     - visual-studio-code-bin
+
+- name: copy config dotfiles
+  ansible.builtin.copy:
+    src: "{{ item.s }}"
+    dest: "{{ item.d }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0644"
+  become: true
+  with_items:
+    - { s: "files/mpd.conf", d: "/home/{{username}}/.config/mpd/" }
+    - { s: "files/ncmpcpp/config", d: "/home/{{username}}/.config/ncmpcpp/" }
+  
+- name: enable mpd.service for user
+  systemd:
+    name: mpd.service
+    state: started
+    enabled: yes
+    scope: user

@@ -19,6 +19,11 @@ arch_dev_packages:
   - ranger
   - tealdeer
   - rust
+  - virtualbox-host-modules-arch
+  - wireguard-tools
+  - networkmanager-openvpn
+  - unrar
+  - p7zip
 
 ubuntu_dev_packages:
   - *op

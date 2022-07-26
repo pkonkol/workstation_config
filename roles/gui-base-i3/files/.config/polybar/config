@@ -51,16 +51,16 @@ monitor = ${env:MONITOR:}
 
 [bar/main]
 inherit=bar/all
-modules-left = powermenu jgmenu sync i3 xwindow
-modules-right = idle temp backlight pulseaudio root wifi cpu mem bat0 bat1 popup-calendar 
+modules-left = powermenu jgmenu sync-up sync-down i3 xwindow
+modules-right = music backlight pulseaudio wifi cpu mem bat_total_tlp popup-calendar 
 tray-position = right
 tray-padding = 0
 tray-maxsize = 16
 
 [bar/side]
 inherit=bar/all
-modules-left = powermenu i3 xwindow
-modules-right = idle temp backlight pulseaudio root wifi cpu mem bat0 bat1 popup-calendar 
+modules-left = powermenu i3 xwindow 
+modules-right = music temp backlight pulseaudio root public-ip wifi-long cpu mem bat0 bat1 popup-calendar 
 
 
 [module/idle]
@@ -76,6 +76,58 @@ type = custom/text
 content = ""
 click-left = "rclone bisync gdrive:/DriveSyncFiles/pkonkol-obsidian/ ~/mnt/obsidian --verbose"
 click-right = "jgmenu_run >/dev/null 2>&1 &"
+
+[module/sync-up]
+type = custom/text
+# exec-if = ""
+content = ""
+click-left = "rclone sync ~/mnt/obsidian gdrive:/DriveSyncFiles/pkonkol-obsidian/"
+click-right = "jgmenu_run >/dev/null 2>&1 &"
+
+[module/sync-down]
+type = custom/text
+# exec-if = ""
+content = ""
+click-left = "rclone sync gdrive:/DriveSyncFiles/pkonkol-obsidian/ ~/mnt/obsidian"
+click-right = "jgmenu_run >/dev/null 2>&1 &"
+
+[module/music]
+type = internal/mpd
+
+host = 127.0.0.1
+port = 6600
+interval = 1
+
+format-online = <icon-play> <icon-pause> <icon-stop> <icon-prev> <icon-next> <label-time> <label-song>
+label-song = %artist:0:15:% - %title:0:20:%
+
+label-offline =  mpd is offline
+
+; Only applies if <icon-X> is used
+icon-play = 契
+icon-pause = 
+icon-stop = 栗
+icon-prev = 玲
+icon-next = 怜
+#icon-seekb = ⏪
+#icon-seekf = ⏩
+icon-random = 
+icon-repeat = 凌
+icon-repeatone = 綾
+#icon-single = 🔂
+#icon-consume = ✀
+
+; Used to display the state of random/repeat/repeatone/single
+; Only applies if <icon-[random|repeat|repeatone|single]> is used
+toggle-on-foreground = #ff
+toggle-off-foreground = #55
+
+; Only applies if <bar-progress> is used
+bar-progress-width = 10
+bar-progress-indicator = |
+bar-progress-fill = ─
+bar-progress-empty = ─
+
 
 [module/jgmenu]
 type = custom/text
@@ -133,9 +185,30 @@ label-underline = ${color.red}
 
 [module/wifi]
 type = internal/network
-interface = eth0
+interface = wlan0
 label-connected = 直%local_ip%
 format-connected = <label-connected>
+label-disconnected = 睊
+format-disconnected = <label-disconnected>
+
+[module/wifi-long]
+type = internal/network
+interface = wlan0
+label-connected = 直%essid%:%local_ip%
+format-connected = <label-connected>
+label-disconnected = 睊
+format-disconnected = <label-disconnected>
+
+[module/public-ip]
+type = custom/script
+exec = "echo ﯱ$(curl -4 -sf ifconfig.co) $(curl -4 -sf ifconfig.co/country-iso) $(curl -4 -sf ifconfig.co/city)"
+interval = 60
+
+[module/wireguard]
+type = custom/script
+exec = ~/.local/bin/vpn-wireguard-wg.sh
+interval = 1
+click-left = ~/.local/bin/vpn-wireguard-wg.sh --toggle &
 
 [module/temp]
 type = internal/temperature
@@ -193,6 +266,12 @@ label-charging = %percentage%%
 label-full = %percentage%%
 label-discharging = %percentage%%
 
+[module/bat_total_tlp]
+type = custom/script
+exec = bash -c 'sudo tlp-stat -b | grep "Charge total" | tr -d -c "[:digit:],."'
+format = <label>
+label = %output%
+interval = 5
 
 [module/backlight]
 type = internal/backlight
@@ -219,15 +298,6 @@ label-muted-foreground = ${srcery-colors.red}
 format-volume = <ramp-volume><label-volume>
 click-right = pavucontrol &
 
-[module/home]
-type=internal/fs
-inherit=module/srcery
-intervall=25
-mount-0=/home
-label-mounted = home:%{T2}%percentage_used%%%{T-}
-format-mounted = <label-mounted>
-format-unmounted = <label-unmounted>
-
 [module/root]
 type=internal/fs
 inherit=module/srcery
@@ -249,7 +319,7 @@ label-maxlen = 40
 type = internal/cpu
 inherit=module/srcery
 interval = 2
-label = %percentage%%
+label = %percentage:3%%
 format = <label>
 
 [module/mem]

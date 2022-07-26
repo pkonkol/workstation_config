@@ -50,6 +50,9 @@ font:
   normal:
     family: Terminus
     style: Regular
-  size: 8.0
+  size: 14.0
 
 live_config_reload: true
+
+env:
+  WINIT_X11_SCALE_FACTOR: "1"
