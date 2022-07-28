@@ -38,7 +38,7 @@ border-bottom-size = 0
 padding-left = 1
 padding-right = 1
 module-margin-left = 1
-module-margin-right = 1
+module-margin-right = 0
 cursor-click = pointer
 cursor-scroll = ns-resize
 bottom=false
@@ -51,7 +51,7 @@ monitor = ${env:MONITOR:}
 
 [bar/main]
 inherit=bar/all
-modules-left = powermenu jgmenu sync-up sync-down i3 xwindow
+modules-left = powermenu power_mode jgmenu sync-up sync-down i3 xwindow 
 modules-right = music backlight pulseaudio wifi cpu mem bat_total_tlp popup-calendar 
 tray-position = right
 tray-padding = 0
@@ -62,6 +62,14 @@ inherit=bar/all
 modules-left = powermenu i3 xwindow 
 modules-right = music temp backlight pulseaudio root public-ip wifi-long cpu mem bat0 bat1 popup-calendar 
 
+[module/power_mode]
+type = custom/script
+exec = ~/.local/bin/polybar-script-xidlehook.sh
+interval = 1
+format = <label>
+label = %output%
+click-left = ~/.local/bin/polybar-script-xidlehook.sh --next
+click-right = "notify-send polybar-env: ${env:POLYBAR_XIDLEHOOK_MODE}"
 
 [module/idle]
 type = custom/script
@@ -81,14 +89,14 @@ click-right = "jgmenu_run >/dev/null 2>&1 &"
 type = custom/text
 # exec-if = ""
 content = ""
-click-left = "rclone sync ~/mnt/obsidian gdrive:/DriveSyncFiles/pkonkol-obsidian/"
+click-left = "rclone sync ~/mnt/obsidian gdrive:/DriveSyncFiles/pkonkol-obsidian/ && notify-send rclone 'uploaded obsidian to cloud'"
 click-right = "jgmenu_run >/dev/null 2>&1 &"
 
 [module/sync-down]
 type = custom/text
 # exec-if = ""
 content = ""
-click-left = "rclone sync gdrive:/DriveSyncFiles/pkonkol-obsidian/ ~/mnt/obsidian"
+click-left = "rclone sync gdrive:/DriveSyncFiles/pkonkol-obsidian/ ~/mnt/obsidian && notify-send rclone 'synced obsidian from cloud' "
 click-right = "jgmenu_run >/dev/null 2>&1 &"
 
 [module/music]
@@ -98,10 +106,11 @@ host = 127.0.0.1
 port = 6600
 interval = 1
 
-format-online = <icon-play> <icon-pause> <icon-stop> <icon-prev> <icon-next> <label-time> <label-song>
-label-song = %artist:0:15:% - %title:0:20:%
+format-online = <icon-play><icon-pause><icon-stop><icon-prev><icon-next><label-time> <label-song>
+label-song = %artist:0:15:%-%title:0:20:%
 
 label-offline =  mpd is offline
+label-time = %elapsed%/%total%
 
 ; Only applies if <icon-X> is used
 icon-play = 契
@@ -155,11 +164,11 @@ label-focused = %name%
 label-focused-background = ${color.bright_black}
 label-focused-underline= ${color.red}
 label-focused-foreground= ${color.yellow}
-label-focused-padding = 1
+label-focused-padding = 0
 
 ; unfocused = Inactive workspace on any monitor
 label-unfocused = %name%
-label-unfocused-padding = 1
+label-unfocused-padding = 0
 
 ; visible = Active workspace on unfocused monitor
 label-visible = %name%
@@ -172,7 +181,7 @@ label-urgent = %name%
 label-urgent-background = ${color.yellow}
 label-urgent-foreground = ${color.black}
 label-urgent-underline = ${self.label-focused-underline}
-label-urgent-padding = 1
+label-urgent-padding = 0
 
 label-separator = |
 
@@ -197,7 +206,7 @@ interface = wlan0
 label-connected = 直%essid%:%local_ip%
 format-connected = <label-connected>
 label-disconnected = 睊
-format-disconnected = <label-disconnected>
+format-disconnected = <label-disconected>
 
 [module/public-ip]
 type = custom/script
@@ -270,7 +279,7 @@ label-discharging = %percentage%%
 type = custom/script
 exec = bash -c 'sudo tlp-stat -b | grep "Charge total" | tr -d -c "[:digit:],."'
 format = <label>
-label = %output%
+label = "%output% "
 interval = 5
 
 [module/backlight]
@@ -287,15 +296,15 @@ ramp-2 =  ""
 type = internal/pulseaudio
 use-ui-max = true
 interval = 5
-label-volume = %percentage%%
+label-volume =%percentage%%
 
-ramp-volume-0 = 奄
-ramp-volume-1 = 奔
-ramp-volume-2 = 墳
+ramp-volume-0 =奄
+ramp-volume-1 =奔
+ramp-volume-2 =墳
 
-label-muted = ﱝ%percentage%%
-label-muted-foreground = ${srcery-colors.red}
-format-volume = <ramp-volume><label-volume>
+label-muted =ﱝ%percentage%%
+label-muted-foreground =${srcery-colors.red}
+format-volume =<ramp-volume><label-volume>
 click-right = pavucontrol &
 
 [module/root]
@@ -303,9 +312,9 @@ type=internal/fs
 inherit=module/srcery
 intervall=25
 mount-0=/
-label-mounted = %{T2}%percentage_used:2%%%{T-}
-format-mounted = <label-mounted>
-format-unmounted = <label-unmounted>
+label-mounted =%{T2}%percentage_used:2%%%{T-}
+format-mounted =<label-mounted>
+format-unmounted =<label-unmounted>
 
 [module/title]
 type = internal/xwindow
@@ -319,18 +328,18 @@ label-maxlen = 40
 type = internal/cpu
 inherit=module/srcery
 interval = 2
-label = %percentage:3%%
+label =%percentage:2%%
 format = <label>
 
 [module/mem]
 type = internal/memory
 inherit=module/srcery
 interval = 2
-label = %gb_free%
-label-warn = %gb_free%
+label =%gb_free%
+label-warn =%gb_free%
 label-warn-foreground = ${color.red}
-format = <label>
-format-warn = <label>
+format =<label>
+format-warn =<label>
 
 
 [module/popup-calendar]

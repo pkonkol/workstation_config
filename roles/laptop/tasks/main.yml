@@ -132,7 +132,8 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
-    - {regexp: HibernateDelaySec , line: HibernateDelaySec=30min }
+    - {regexp: HibernateDelaySec , line: HibernateDelaySec=120min }
+    - {regexp: AllowSuspendThenHibernate , line: AllowSuspendThenHibernate=yes }
 
 # set up ?
 # TODO this as a service and timer

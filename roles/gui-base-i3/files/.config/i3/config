@@ -66,8 +66,9 @@ exec --no-startup-id xss-lock --transfer-sleep-lock ~/.local/bin/dpms-notifier.s
 exec --no-startup-id xidlehook \
     --not-when-fullscreen \
     --not-when-audio \
-    --timer 300 \
-    'brightnessctl s 20%;notify-send "Locking in 4 minutes" " "' \
+    --socket ~/.xidlehook.sock \
+    --timer 240 \
+    'brightnessctl s 20%;notify-send "Locking in 6 minutes" " "' \
     'brightnessctl s 100%' \
     --timer 120 \
     'brightnessctl s 2%;notify-send -t 120000 "Locking in 120 seconds"' \
@@ -75,9 +76,14 @@ exec --no-startup-id xidlehook \
     --timer 120 \
     'loginctl lock-session' \
     'brightnessctl s 100%' \
-    --timer 300 \
+    --timer 360 \
     'loginctl lock-session; systemctl suspend-then-hibernate' \
+    'brightnessctl s 100%' \ 
+    --timer 360 \
+    'loginctl lock-session; systemctl hibernate' \
     'brightnessctl s 100%'
+
+bindsym $mod+g exec --no-startup-id loginctl lock-session
 
 
 # srcery-colors (https://github.com/srcery-colors/srcery-gui/blob/master/i3wm/i3-config)
@@ -207,25 +213,25 @@ bindsym $mod+minus scratchpad show
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1:"
-set $ws2 "2:"
-set $ws3 "3:﬏"
-set $ws4 "4:ﴬ"
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3﬏"
+set $ws4 "4ﴬ"
 set $ws5 "5"
 set $ws6 "6"
 set $ws7 "7"
-set $ws8 "8"
-set $ws9 "9:"
+set $ws8 "8"
+set $ws9 "9"
 set $ws10 "10"
-set $ws11 "F1:"
-set $ws12 "F2:"
-set $ws13 "F3:﬏"
-set $ws14 "F4:ﴬ"
+set $ws11 "F1"
+set $ws12 "F2"
+set $ws13 "F3﬏"
+set $ws14 "F4ﴬ"
 set $ws15 "F5"
 set $ws16 "F6"
 set $ws17 "F7"
-set $ws18 "F8"
-set $ws19 "F9:"
+set $ws18 "F8"
+set $ws19 "F9"
 
 # switch to workspace
 bindsym $mod+1 workspace number $ws1
