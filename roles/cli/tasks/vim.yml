@@ -2,7 +2,7 @@
 
 - name: Install vim
   package:
-    name: gvim
+    name: "{{ vim_package[ansible_os_family] }}"
     state: present
   become: true
 

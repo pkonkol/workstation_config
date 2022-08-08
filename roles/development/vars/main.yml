@@ -7,9 +7,6 @@ dev_packages: &op
   - nmap
   - vagrant
   - nodejs
-  - kubectl
-  - helm
-  - minikube
 
 arch_dev_packages:
   - *op
@@ -24,6 +21,9 @@ arch_dev_packages:
   - networkmanager-openvpn
   - unrar
   - p7zip
+  # - helm TODO check these in pacman
+  # - minikube
+  # - kubectl
 
 ubuntu_dev_packages:
   - *op
@@ -32,3 +32,5 @@ ubuntu_dev_packages:
 ubuntu_dev_snap_packages:
   - go
   - notepad-plus-plus
+  - kubectl
+  - helm
