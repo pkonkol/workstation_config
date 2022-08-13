@@ -9,6 +9,15 @@
     - "{{ arch_dev_packages|flatten }}"
   become: true
 
+- name: install arch aur dev packages
+  when: ansible_facts["os_family"]|lower == "archlinux"
+  kewlfft.aur.aur:
+    name: "{{ item }}"
+  become: true
+  become_user: "{{ username }}"
+  with_items:
+    - "{{ arch_aur_dev_packages|flatten }}"
+
 - name: Install ubuntu dev packages 
   when: ansible_facts["os_family"]|lower == "debian"
   become: true

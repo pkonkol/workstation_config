@@ -21,9 +21,15 @@ arch_dev_packages:
   - networkmanager-openvpn
   - unrar
   - p7zip
+  - wol
   # - helm TODO check these in pacman
   # - minikube
   # - kubectl
+
+arch_aur_dev_packages:
+  - zfs-linux
+  - zfs-linux-headers
+  - zfs-utils
 
 ubuntu_dev_packages:
   - *op

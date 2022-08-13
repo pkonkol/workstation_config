@@ -36,6 +36,10 @@ get_mode() {
     elif [[ "$suspend" == "true" && "$hibernate" == "true" && "$lock" == "true" ]]; then 
         # notify-send get "exporting nolock"
         export MODE="nolock"
+    elif [[ "$suspend" == "false" && "$hibernate" == "false" && "$lock" == "false" ]]; then 
+        # notify-send get "exporting nolock"
+        toggle_mode
+        export MODE="normal"
     fi
 }
 

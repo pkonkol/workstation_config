@@ -63,6 +63,7 @@
     - autorandr
     - z
     - qt5ct
+    - ueberzug
   become: true
 
 - name: Additional packages from aur
