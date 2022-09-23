@@ -132,7 +132,7 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
-    - {regexp: HibernateDelaySec , line: HibernateDelaySec=120min }
+    - {regexp: HibernateDelaySec , line: HibernateDelaySec=2880min }
     - {regexp: AllowSuspendThenHibernate , line: AllowSuspendThenHibernate=yes }
 
 # set up ?

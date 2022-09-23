@@ -51,7 +51,7 @@ monitor = ${env:MONITOR:}
 
 [bar/main]
 inherit=bar/all
-modules-left = powermenu power_mode jgmenu sync-up sync-down i3 xwindow 
+modules-left = powermenu power_mode jgmenu i3 xwindow 
 modules-right = music backlight pulseaudio wifi cpu mem bat_total_tlp popup-calendar 
 tray-position = right
 tray-padding = 0
@@ -83,20 +83,6 @@ type = custom/text
 # exec-if = ""
 content = ""
 click-left = "rclone bisync gdrive:/DriveSyncFiles/pkonkol-obsidian/ ~/mnt/obsidian --verbose"
-click-right = "jgmenu_run >/dev/null 2>&1 &"
-
-[module/sync-up]
-type = custom/text
-# exec-if = ""
-content = ""
-click-left = "rclone sync ~/mnt/obsidian gdrive:/DriveSyncFiles/pkonkol-obsidian/ && notify-send rclone 'uploaded obsidian to cloud'"
-click-right = "jgmenu_run >/dev/null 2>&1 &"
-
-[module/sync-down]
-type = custom/text
-# exec-if = ""
-content = ""
-click-left = "rclone sync gdrive:/DriveSyncFiles/pkonkol-obsidian/ ~/mnt/obsidian && notify-send rclone 'synced obsidian from cloud' "
 click-right = "jgmenu_run >/dev/null 2>&1 &"
 
 [module/music]
