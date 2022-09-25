@@ -46,3 +46,17 @@
   package:
     name: zsh-antigen
     state: present
+
+- name: create symlink for antigen.zsh
+  when: ansible_facts["os_family"] == "Debian"
+  become: true
+  block:
+    - file:
+        dest: /usr/share/zsh/share
+        state: directory
+    - file: 
+        src: /usr/share/zsh-antigen/antigen.zsh
+        dest: /usr/share/zsh/share/antigen.zsh
+        state: link
+        force: yes
+    

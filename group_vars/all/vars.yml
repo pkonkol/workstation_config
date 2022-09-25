@@ -1,6 +1,6 @@
 ---
 
-username: konkolpx
+username: user
 userpasshash: "{{ vault_userpasshash }}"
 git_name: pkonkol
 git_email: "{{ vault_git_email }}"

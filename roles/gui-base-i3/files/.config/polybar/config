@@ -78,13 +78,6 @@ interval = 1
 format = <label>
 label = 鈴%output:0:15:...%
 
-[module/sync]
-type = custom/text
-# exec-if = ""
-content = ""
-click-left = "rclone bisync gdrive:/DriveSyncFiles/pkonkol-obsidian/ ~/mnt/obsidian --verbose"
-click-right = "jgmenu_run >/dev/null 2>&1 &"
-
 [module/music]
 type = internal/mpd
 
