@@ -67,20 +67,20 @@ exec --no-startup-id xss-lock --transfer-sleep-lock ~/.local/bin/dpms-notifier.s
 exec --no-startup-id xidlehook \
     --socket ~/.xidlehook.sock \
     --timer 240 \
-    'brightnessctl s 20%;notify-send "Locking in 6 minutes" " "' \
-    'brightnessctl s 100%' \
+    'brightnessctl -s;brightnessctl s 20%;notify-send "Locking in 6 minutes" " "' \
+    'brightnessctl -r' \
     --timer 120 \
     'brightnessctl s 2%;notify-send "Locking in 120 seconds"' \
-    'brightnessctl s 100%' \
+    'brightnessctl -r' \
     --timer 120 \
     'loginctl lock-session' \
-    'brightnessctl s 100%' \
+    'brightnessctl -r' \
     --timer 360 \
     'loginctl lock-session; systemctl suspend-then-hibernate' \
-    'brightnessctl s 100%' \
+    'brightnessctl -r' \
     --timer 360 \
     'loginctl lock-session; systemctl hibernate' \
-    'brightnessctl s 100%'
+    'brightnessctl -r'
 
 bindsym $mod+g exec --no-startup-id loginctl lock-session
 
