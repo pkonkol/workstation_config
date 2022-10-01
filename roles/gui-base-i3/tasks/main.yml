@@ -146,6 +146,7 @@
     - { s: "files/.config/ranger", d: "/home/{{username}}/.config" }
     - { s: "files/.config/gtk-3.0", d: "/home/{{username}}/.config" }
     - { s: "files/.config/Trolltech.conf", d: "/home/{{username}}/.config/" }
+    - { s: "files/.config/fontconfig", d: "/home/{{username}}/.config/fontconfig" }
 
 - name: copy icons
   become: true

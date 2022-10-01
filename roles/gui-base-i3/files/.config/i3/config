@@ -70,7 +70,7 @@ exec --no-startup-id xidlehook \
     'brightnessctl s 20%;notify-send "Locking in 6 minutes" " "' \
     'brightnessctl s 100%' \
     --timer 120 \
-    'brightnessctl s 2%;notify-send -t 120000 "Locking in 120 seconds"' \
+    'brightnessctl s 2%;notify-send "Locking in 120 seconds"' \
     'brightnessctl s 100%' \
     --timer 120 \
     'loginctl lock-session' \
