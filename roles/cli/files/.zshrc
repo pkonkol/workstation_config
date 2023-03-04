@@ -1,6 +1,6 @@
 # Template for .zshrc
 # Custom $PATH
-export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH:/home/user/.cargo/bin:/home/user/go/bin"
 umask 022
 
 export EDITOR=vim

@@ -1,5 +1,7 @@
 ---
 
+- import_tasks: guest.yml
+
 - name: Create usergroups
   group:
     name: "{{ item }}"
@@ -121,3 +123,4 @@
     - networkmanager
     - network-manager-applet
   become: true
+

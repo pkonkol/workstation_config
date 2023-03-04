@@ -10,9 +10,9 @@
   become: true
   copy:
     src: files/.zshrc
-    dest: /home/{{username}}/.zshrc
-    owner: "{{username}}"
-    group: "{{username}}"
+    dest: /home/{{user}}/.zshrc
+    owner: "{{user}}"
+    group: "{{user}}"
     mode: 0640
 
 # Just .config dir for now, TODO remove with_items
@@ -21,22 +21,22 @@
   copy: 
     src: "{{ item.s }}"
     dest: "{{ item.d }}"
-    owner: "{{ username }}"
-    group: "{{ username }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: '0644'
   with_items:
-    - { s: "files/.config/", d: "/home/{{username}}/.config/" }
+    - { s: "files/.config/", d: "/home/{{user}}/.config/" }
 
 - name: Set user default shell to zsh
   become: true
   user:
-    name: "{{ username }}"
+    name: "{{ user }}"
     shell: /usr/bin/zsh
 
 - name: Install antigen arch
   when: ansible_facts["os_family"] == "Archlinux"
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ user }}"
   kewlfft.aur.aur:
     name: antigen-git
   

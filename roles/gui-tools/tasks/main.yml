@@ -19,6 +19,12 @@
     - mpd
     - ncmpcpp
     - wireshark-qt
+    - zathura-ps
+    - zathura-pdf-poppler
+    #- zathura-pdf-mupdf
+    - zathura-djvu
+    - zathura-cb
+
   become: true
 
 - name: Gui utils from aur

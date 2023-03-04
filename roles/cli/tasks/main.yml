@@ -1,8 +1,24 @@
 ---
 
-- import_tasks: zsh.yml
-- import_tasks: vim.yml
-- import_tasks: tmux.yml
+- include_tasks: zsh.yml
+  vars:
+    user: "{{ username }}"
+- include_tasks: vim.yml
+  vars:
+    user: "{{ username }}"
+- include_tasks: tmux.yml
+  vars:
+    user: "{{ username }}"
+
+- include_tasks: zsh.yml
+  vars:
+    user: guest
+- include_tasks: vim.yml
+  vars:
+    user: guest
+- include_tasks: tmux.yml
+  vars:
+    user: guest
 
 - name: Copy git config
   template:

@@ -9,6 +9,8 @@ export S="$HOME/.xidlehook.sock"
 export HIB="4"
 export SUS="3"
 export LOCK="2"
+export DIM0="0"
+export DIM1="1"
 
 if [[ ! -S "$S" ]]; then
     echo "ﯡ"
@@ -51,24 +53,32 @@ toggle_mode() {
             xidlehook-client --socket $S control --timer $HIB --action Disable
             xidlehook-client --socket $S control --timer $SUS --action Enable
             xidlehook-client --socket $S control --timer $LOCK --action Enable
+            xidlehook-client --socket $S control --timer $DIM0 --action Enable
+            xidlehook-client --socket $S control --timer $DIM1 --action Enable
         ;;
         "normal")
             # switch to nosleep
             xidlehook-client --socket $S control --timer $HIB --action Disable
             xidlehook-client --socket $S control --timer $SUS --action Disable
             xidlehook-client --socket $S control --timer $LOCK --action Enable
+            xidlehook-client --socket $S control --timer $DIM0 --action Enable
+            xidlehook-client --socket $S control --timer $DIM1 --action Enable
         ;;
         "nosleep")
             # switch to nolock
             xidlehook-client --socket $S control --timer $HIB --action Disable
             xidlehook-client --socket $S control --timer $SUS --action Disable
             xidlehook-client --socket $S control --timer $LOCK --action Disable
+            xidlehook-client --socket $S control --timer $DIM0 --action Disable
+            xidlehook-client --socket $S control --timer $DIM1 --action Disable
         ;;
         "nolock")
             # switch to powersave
             xidlehook-client --socket $S control --timer $HIB --action Enable
             xidlehook-client --socket $S control --timer $SUS --action Disable
             xidlehook-client --socket $S control --timer $LOCK --action Enable
+            xidlehook-client --socket $S control --timer $DIM0 --action Enable
+            xidlehook-client --socket $S control --timer $DIM1 --action Enable
         ;;
         *)
             notify-send casemode "didnt match any mode, going back to default"
@@ -76,6 +86,7 @@ toggle_mode() {
             xidlehook-client --socket $S control --timer $HIB --action Disable
             xidlehook-client --socket $S control --timer $SUS --action Enable
             xidlehook-client --socket $S control --timer $LOCK --action Enable
+            xidlehook-client --socket $S control --timer $DIM --action Enable
         ;;
     esac
 }

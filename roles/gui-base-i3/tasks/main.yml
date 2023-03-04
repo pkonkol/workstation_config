@@ -49,7 +49,8 @@
     - xdotool
     - conky
     - clipmenu
-    - ttf-nerd-fonts-symbols-mono
+    - ttf-nerd-fonts-symbols-2048-em
+    - ttf-nerd-fonts-symbols-2048-em-mono
     - jgmenu
     - brightnessctl
     - flameshot
@@ -74,117 +75,16 @@
   with_items:
     - themix-full-git
     - polybar
-    - nerd-fonts-anonymous-pro
     - qt5-styleplugins
     - qt6gtk2
+      
 
-- name: Clone ranger_devicons plugin repo
-  git:
-    repo: https://github.com/alexanderjeurissen/ranger_devicons
-    dest: /home/{{ username }}/.config/ranger/plugins/ranger_devicons
-  become: true
-  become_user: "{{ username }}"
+- name: setup home for guest
+  include_tasks: home.yml
+  vars:
+    user: guest
 
-- name: copy home dotfiles
-  ansible.builtin.copy:
-    src: "{{ item.s }}"
-    dest: "{{ item.d }}"
-    owner: "{{ username }}"
-    group: "{{ username }}"
-    mode: "0644"
-  become: true
-  with_items:
-    - { s: "files/.Xresources", d: "/home/{{username}}/" }
-    - { s: "files/.xsettingsd", d: "/home/{{username}}/" }
-    - { s: "files/.wallpapers", d: "/home/{{username}}/" }
-    - { s: "files/.themes", d: "/home/{{username}}" }
-    - { s: "files/.gtkrc-2.0", d: "/home/{{username}}/" }
-
-- name: copy config dotfiles
-  ansible.builtin.copy:
-    src: "{{ item.s }}"
-    dest: "{{ item.d }}"
-    owner: "{{ username }}"
-    group: "{{ username }}"
-    mode: "0644"
-  become: true
-  with_items:
-    - { s: "files/.config/i3/config", d: "/home/{{username}}/.config/i3/" }
-    - { s: "files/.config/jgmenu", d: "/home/{{username}}/.config/" }
-    - { s: "files/.config/conky", d: "/home/{{username}}/.config/" }
-    - {
-        s: "files/.config/dunst/dunstrc",
-        d: "/home/{{username}}/.config/dunst/",
-      }
-    - { s: "files/.config/picom.conf", d: "/home/{{username}}/.config/" }
-    - {
-        s: "files/.config/oomox/colors/srcery",
-        d: "/home/{{username}}/.config/oomox/colors/",
-      }
-    - {
-        s: "files/.config/procps/toprc",
-        d: "/home/{{username}}/.config/procps/",
-      }
-    - {
-        s: "files/.config/kitty/kitty.conf",
-        d: "/home/{{username}}/.config/kitty/",
-      }
-    - {
-        s: "files/.config/kitty/srcery_kitty.conf",
-        d: "/home/{{username}}/.config/kitty/",
-      }
-    - { s: "files/.config/alacritty", d: "/home/{{username}}/.config/" }
-    - {
-        s: "files/.config/rofi/srcery_rofi.rasi",
-        d: "/home/{{username}}/.config/rofi/",
-      }
-    - {
-        s: "files/.config/rofi/config.rasi",
-        d: "/home/{{username}}/.config/rofi/",
-      }
-    - { s: "files/.config/polybar", d: "/home/{{username}}/.config/" }
-    - { s: "files/.config/ranger", d: "/home/{{username}}/.config" }
-    - { s: "files/.config/gtk-3.0", d: "/home/{{username}}/.config" }
-    - { s: "files/.config/Trolltech.conf", d: "/home/{{username}}/.config/" }
-    - { s: "files/.config/fontconfig", d: "/home/{{username}}/.config/fontconfig" }
-
-- name: copy icons
-  become: true
-  ansible.builtin.copy:
-    src: "files/.icons"
-    dest: "/home/{{username}}/"
-    owner: "{{ username }}"
-    group: "{{ username }}"
-    mode: "0644"
-
-- name: copy local bin
-  ansible.builtin.copy:
-    src: "{{ item.s }}"
-    dest: "{{ item.d }}"
-    owner: "{{ username }}"
-    group: "{{ username }}"
-    mode: "0644"
-  become: true
-  with_items:
-    - { s: "files/.local/bin", d: "/home/{{username}}/.local/" }
-
-- name: Chmod +x for scripts
-  file: dest="{{item}}" mode="ug+x"
-  with_items:
-    - "/home/{{username}}/.config/polybar/launch.sh"
-    - "/home/{{username}}/.local/bin/polybar-popup-calendar.sh"
-    - "/home/{{username}}/.local/bin/rofi-power-menu"
-    - "/home/{{username}}/.local/bin/save_dotfiles.sh"
-    - "/home/{{username}}/.local/bin/dpms-notifier.sh"
-  become: true
-
-- name: Copy root dotfiles
-  ansible.builtin.copy:
-    src: "{{ item.s }}"
-    dest: "{{ item.d }}"
-    owner: "root"
-    group: "root"
-    mode: "0644"
-  with_items:
-    - { s: "files/xinitrc", d: "/etc/X11/xinit/" }
-  become: true
+- name: setup home for main user
+  include_tasks: home.yml
+  vars:
+    user: "{{username}}"

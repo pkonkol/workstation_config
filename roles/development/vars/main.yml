@@ -15,20 +15,29 @@ arch_dev_packages:
   - veracrypt
   - ranger
   - tealdeer
-  - rust
+  #- rust
   - virtualbox-host-modules-arch
   - wireguard-tools
   - networkmanager-openvpn
   - unrar
   - p7zip
   - wol
+  - rustup
+  - clang
+  - bat
+  - yq
+  - postgresql
+  - delve
   # - helm TODO check these in pacman
   # - minikube
   # - kubectl
 
 arch_aur_dev_packages:
-  - zfs-linux
-  - zfs-linux-headers
+  # these sometimes have problems with kernel version, updates are lagging
+  #- zfs-linux
+  #- zfs-linux-headers
+  #- zfs-linux-lts
+  #- zfs-linux-lts-headers
   - zfs-utils
 
 ubuntu_dev_packages:
