@@ -9,23 +9,23 @@
 - name: Copy config
   copy:
     src: files/.tmux.conf
-    dest: /home/{{username}}/.tmux.conf
-    owner: "{{username}}"
-    group: "{{username}}"
+    dest: /home/{{user}}/.tmux.conf
+    owner: "{{user}}"
+    group: "{{user}}"
     mode: 0640
   become: true
 
 - name: Check if tpm is installed
   stat:
-    path: /home/{{username}}/.tmux/plugins/tpm
+    path: /home/{{user}}/.tmux/plugins/tpm
   register: tpm_dir
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ user }}"
 
 - name: Install tpm
   when: not (tpm_dir.stat.exists and tpm_dir.stat.isdir)
   git:
     repo: "https://github.com/tmux-plugins/tpm.git"
-    dest: /home/{{username}}/.tmux/plugins/tpm
+    dest: /home/{{user}}/.tmux/plugins/tpm
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ user }}"

@@ -9,18 +9,18 @@
 - name: Copy config
   copy:
     src: files/.vimrc
-    dest: /home/{{username}}/.vimrc
-    owner: "{{username}}"
-    group: "{{username}}"
+    dest: /home/{{user}}/.vimrc
+    owner: "{{user}}"
+    group: "{{user}}"
     mode: 0640
   become: true
 
 - name: Check if vim-plug is installed
   stat:
-    path: /home/{{username}}/.vim/autoload/plug.vim
+    path: /home/{{user}}/.vim/autoload/plug.vim
   register: plug_file
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ user }}"
 
 - name: Install vim-plug
   when: not (plug_file.stat.exists)
@@ -30,4 +30,4 @@
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     executable: /usr/bin/zsh
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ user }}"

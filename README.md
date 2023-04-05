@@ -26,6 +26,7 @@ ansible-galaxy collection install -r requirements.yml
 
 1. Use on localhost
   * If using `vagrant ssh` then `cd /home/vagrant/workstation-config`
+  * `ansible-playbook -i 127.0.0.1, -c local -v main.yml --start-at-task="setup home for guest"` to skip some of the tasks
   * `ansible-playbook -i 127.0.0.1, -c local -v main.yml --tags core` for CLI only or
   * `ansible-playbook -i 127.0.0.1, -c local -v main.yml --tags core,gui` for both CLI and
     gui with i3 configuration

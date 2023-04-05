@@ -1,7 +1,6 @@
 ---
 
 official_packages: &op
-  - python2
   - python3
   - htop
   - openvpn

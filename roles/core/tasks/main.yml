@@ -108,8 +108,8 @@
 - name: Install pip packages
   pip:
     name:
-     - github3.py
-     - requests
+      - github3.py
+      - requests
     state: latest
   become: true
   become_user: "{{ username }}"
