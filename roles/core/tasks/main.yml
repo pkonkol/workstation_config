@@ -1,7 +1,5 @@
 ---
 
-- import_tasks: guest.yml
-
 - name: Create usergroups
   group:
     name: "{{ item }}"
@@ -17,6 +15,8 @@
     password: "{{ userpasshash }}"
     groups: docker,wheel
   become: true
+
+- import_tasks: guest.yml
 
 - name: Ensure that wheel is able to use sudo without password
   lineinfile:
