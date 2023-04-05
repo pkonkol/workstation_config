@@ -16,7 +16,7 @@ arch_dev_packages:
   - ranger
   - tealdeer
   #- rust
-  - virtualbox-host-modules-arch
+  #- virtualbox-host-modules-arch
   - wireguard-tools
   - networkmanager-openvpn
   - unrar

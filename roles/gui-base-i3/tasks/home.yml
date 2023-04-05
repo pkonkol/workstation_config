@@ -56,7 +56,7 @@
   become_user: "{{ user }}"
 
 - name: copy home dotfiles
-  when: 0 > 1
+  #when: 0 > 1
   ansible.builtin.copy:
     src: "{{ item.s }}"
     dest: "{{ item.d }}"
@@ -76,7 +76,7 @@
     - { s: "files/.gtkrc-2.0", d: "/home/{{user}}/" }
 
 - name: copy icons
-  when: 0 > 1
+  #when: 0 > 1
   ansible.builtin.copy:
     src: "files/.icons"
     dest: "/home/{{user}}/"
