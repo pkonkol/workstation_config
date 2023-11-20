@@ -1,9 +1,0 @@
----
-
-- hosts: "*"
-  roles:
-    - core
-    - cli
-    - development
-    - gui
-    - multimedia
