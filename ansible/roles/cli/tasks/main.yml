@@ -1,0 +1,30 @@
+---
+
+- include_tasks: zsh.yml
+  vars:
+    user: "{{ username }}"
+- include_tasks: vim.yml
+  vars:
+    user: "{{ username }}"
+- include_tasks: tmux.yml
+  vars:
+    user: "{{ username }}"
+
+- include_tasks: zsh.yml
+  vars:
+    user: guest
+- include_tasks: vim.yml
+  vars:
+    user: guest
+- include_tasks: tmux.yml
+  vars:
+    user: guest
+
+- name: Copy git config
+  template:
+    src: templates/gitconfig.j2
+    dest: /home/{{username}}/.gitconfig
+    owner: "{{username}}"
+    group: "{{username}}"
+    mode: 0640
+  become: true

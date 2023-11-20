@@ -1,0 +1,58 @@
+---
+
+- name: Install
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - vlc
+    - audacity
+    - chromium
+    # - code
+    - firefox
+    - keepassxc
+    - gedit
+    - calibre
+    - kitty
+    - alacritty
+    - libreoffice-still
+    - mpd
+    - ncmpcpp
+    - wireshark-qt
+    - zathura-ps
+    - zathura-pdf-poppler
+    #- zathura-pdf-mupdf
+    - zathura-djvu
+    - zathura-cb
+
+  become: true
+
+- name: Gui utils from aur
+  when: ansible_facts["os_family"] == "Archlinux"
+  kewlfft.aur.aur:
+    name: "{{ item }}"
+  become: true
+  become_user: "{{ username }}"
+  with_items:
+    - obsidian
+    - visual-studio-code-bin
+    - tor-browser
+
+- name: copy config dotfiles
+  ansible.builtin.copy:
+    src: "{{ item.s }}"
+    dest: "{{ item.d }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0644"
+  become: true
+  with_items:
+    - { s: "files/mpd.conf", d: "/home/{{username}}/.config/mpd/" }
+    - { s: "files/ncmpcpp/config", d: "/home/{{username}}/.config/ncmpcpp/" }
+  
+- name: enable mpd.service for user
+  systemd:
+    name: mpd.service
+    state: started
+    enabled: yes
+    scope: user

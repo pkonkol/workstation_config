@@ -1,0 +1,145 @@
+---
+
+- name: Install TLP
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  become: true
+  with_items:
+    - tlp
+    - powertop
+
+- name: enable tlp
+  become: true
+  systemd:
+    name: tlp.service
+    state: started
+    enabled: yes
+  
+
+- name: mask rfkill for tlp
+  become: true
+  systemd:
+    name: "{{item}}"
+    masked: yes
+  with_items:
+    - systemd-rfkill.service
+    - systemd-rfkill.socket
+
+- name: Configure fingerprint reader
+  become: true
+  become_user: "{{ username }}"
+  kewlfft.aur.aur:
+    name: python-validity 
+  
+
+- name: Install laptop packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  become: true
+  with_items:
+    - telegram-desktop
+    - discord
+    - caprine
+    - acpi
+    - rclone
+    - ethtool
+    - smartmontools
+
+- name: Install t480 packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  become: true
+  with_items:
+    - xf86-video-intel
+
+- name: add to group video
+  user:
+    name: "{{ username }}"
+    group: video
+    append: yes
+  become: true
+
+- name: create udev rule for backlight setup permission
+  become: true
+  copy:
+    dest: /etc/udev/rules.d/90-backlight.rules
+    content: |
+      SUBSYSTEM=="backlight", ACTION=="add", \
+        RUN+="/bin/chgrp video /sys/class/backlight/%k/brightness", \
+        RUN+="/bin/chmod g+w /sys/class/backlight/%k/brightness"
+
+      SUBSYSTEM=="leds", ACTION=="add", KERNEL=="*::kbd_backlight", \
+        RUN+="/bin/chgrp video /sys/class/leds/%k/brightness", \
+        RUN+="/bin/chmod g+w /sys/class/leds/%k/brightness"
+
+- name: pulse audio manual sink workaround
+  become: true
+  lineinfile:
+    path: /etc/pulse/default.pa
+    insertafter: "^#load-module module-pipe-sink"
+    line: load-module module-alsa-sink device=hw:0,7
+
+- name: install bluez
+  become: true
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - bluez
+    - bluez-utils
+
+- name: printer packages
+  become: true
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - cups
+    - ghostscript
+    - system-config-printer
+    - foomatic-db-engine
+    - foomatic-db
+    - foomatic-db-ppds
+
+- name: HL-1110 drivers
+  become: true
+  become_user: "{{ username }}"
+  kewlfft.aur.aur:
+    name: brlaser-git 
+    # name: brother-hl1118
+
+- name: edit logind.conf
+  become: true
+  lineinfile:
+    path: /etc/systemd/logind.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - {regexp: HandlePowerKey , line: HandlePowerKey=ignore }
+    - {regexp: HandlePowerKeyLongPress , line: HandlePowerKeyLongPress=hibernate }
+    - {regexp: HandleLidSwitch , line: HandleLidSwitch=suspend-then-hibernate }
+    - {regexp: HandleLidSwitchExternalPower , line: HandleLidSwitchExternalPower=ignore }
+    - {regexp: HandleLidSwitchDocked , line: HandleLidSwitchDocked=ignore }
+    - {regexp: HoldoffTimeoutSec , line: HoldoffTimeoutSec=120s }
+
+- name: edit sleep.conf
+  become: true
+  lineinfile:
+    path: /etc/systemd/logind.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - {regexp: HibernateDelaySec , line: HibernateDelaySec=2880min }
+    - {regexp: AllowSuspendThenHibernate , line: AllowSuspendThenHibernate=yes }
+
+# set up ?
+# TODO this as a service and timer
+# - name: udev hibernate on low battery
+#   become: true
+#   copy:
+#     dest: /etc/udev/rules.d/80-hibernate.rules
+#     content: |
+#       SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="[0-5]", RUN+="/usr/bin/systemctl hibernate"
